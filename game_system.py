@@ -508,8 +508,8 @@ class GameSystem:
 
         # Create Pacman.
         self.game_obj_player = Player(224, 424, self.dots_eaten, self.input_manager, self.game_objs_tiles,
-                                      self.game_objs_dots, self.game_obj_fruit, self.game_objs_ghosts,
-                                      self.game_objs_text_boxes, self.sprite_images)
+                                      self.game_objs_dots, self.game_objs_pellets, self.game_obj_fruit,
+                                      self.game_objs_ghosts, self.game_objs_text_boxes, self.sprite_images)
 
         # Create the ghost house entrance.
         self.game_obj_ghost_house_entrance = GhostHouseEntrance(224, 232, self.sprite_images)

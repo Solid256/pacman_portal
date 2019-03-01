@@ -4,13 +4,14 @@ from game_object import GameObject
 
 
 class Player(GameObject):
-    def __init__(self, x, y, dots_eaten, input_manager, game_objs_tiles, game_objs_dots, game_obj_fruit,
-                 game_objs_ghosts, game_objs_text_boxes, sprites):
+    def __init__(self, x, y, dots_eaten, input_manager, game_objs_tiles, game_objs_dots, game_objs_pellets,
+                 game_obj_fruit, game_objs_ghosts, game_objs_text_boxes, sprites):
         super(Player, self).__init__(x, y)
         self.sprites = sprites
         self.input_manager = input_manager
         self.game_objs_tiles = game_objs_tiles
         self.game_objs_dots = game_objs_dots
+        self.game_objs_pellets = game_objs_pellets
         self.game_obj_fruit = game_obj_fruit
         self.game_objs_ghosts = game_objs_ghosts
         self.text_boxes = game_objs_text_boxes
@@ -196,12 +197,13 @@ class Player(GameObject):
 
             # Processing for when the player isn't dead.
             if not self.is_dead:
-                # Check if all the pacdots are eaten.
-                if len(self.game_objs_dots) == 0:
+                # Check if all the pacdots and pellets are eaten.
+                if len(self.game_objs_dots) == 0 and len(self.game_objs_pellets) == 0:
                     # Freeze the game and end it.
                     self.is_running = False
                     self.image = self.image_runr2
                     self.finished_map = True
+                    self.game_obj_fruit = None
                 else:
                     # Checks if the player is able to change direction.
                     is_able_change_direction = True
@@ -435,4 +437,3 @@ class Player(GameObject):
         else:
             if self.cur_ready1_anim >= self.max_ready1_anim:
                 self.cur_ready1_anim = 0
-
