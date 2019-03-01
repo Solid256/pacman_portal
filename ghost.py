@@ -133,7 +133,7 @@ class Ghost(GameObject):
         self.collision_rect = pygame.Rect(x - 8, y - 8, 16, 16)
 
         # The running speed of the ghost.
-        self.run_speed = 1.9
+        self.run_speed = 1.8
 
         # The traveling speed of the ghost.
         self.traveling_speed = 1.5

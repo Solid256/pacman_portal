@@ -21,6 +21,8 @@ class GameSystem:
         self.game_objs_ghosts = []
         self.game_objs_text_boxes = {}
         self.fonts = {}
+        self.fruit_display = {}
+        self.lives_display = []
 
         # The columns in the a star array.
         self.a_star_array_rows = 29
@@ -35,7 +37,7 @@ class GameSystem:
             for y in range(0, self.a_star_array_columns):
                 self.a_star_array[x].append(None)
 
-        # The list of nodes in the a star graph, extracted from the a star array. It also containst a tuple with the x
+        # The list of nodes in the a star graph, extracted from the a star array. It also contain a tuple with the x
         # and y coordinate.
         self.a_star_list = []
         self.sprite_images = {}
@@ -54,9 +56,25 @@ class GameSystem:
         # The number of dots Pacman has eaten.
         self.dots_eaten = 0
 
+        # The current score from the current playthrough.
+        self.current_score = 0
+
+        # Checks if the player got an extra life.
+        self.got_extra_life = False
+
+        # The score needed to get an extra life. It is 10,000, just like in the original Pacman.
+        self.extra_life_score = 10000
+
         # Begin the game.
         self.setup_pygame()
         self.load_sprite_images()
+
+        cur_rect = pygame.Rect(0, 0, 32, 32)
+        self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_rect))
+
+        cur_rect2 = pygame.Rect(0, 0, 32, 32)
+        self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_rect2))
+
         self.load_map(True)
         self.main_loop()
 
@@ -140,6 +158,8 @@ class GameSystem:
             # Check if changing the level or state.
             if self.game_obj_player.lose_life:
                 self.lives -= 1
+                if not len(self.lives_display) == 0:
+                    self.lives_display.pop(0)
                 if self.lives > 0:
                     self.load_map(False)
                 else:
@@ -148,11 +168,13 @@ class GameSystem:
                     # Create the game over text.
                     font1 = self.fonts["PressStart2P.ttf"]
 
-                    text_3 = TextBox(185, 328, "GAME", font1, (225, 0, 0))
+                    text_3 = TextBox(185, 328, False, "GAME", font1, (225, 0, 0))
                     self.game_objs_text_boxes["GAME"] = text_3
 
-                    text_4 = TextBox(260, 328, "OVER", font1, (225, 0, 0))
+                    text_4 = TextBox(260, 328, False, "OVER", font1, (225, 0, 0))
                     self.game_objs_text_boxes["OVER"] = text_4
+
+                    self.game_obj_player.image = None
 
             elif self.game_obj_player.finished_map_finished_anim:
                 self.cur_level += 1
@@ -161,6 +183,14 @@ class GameSystem:
                 if self.ghost_max_time_scatter > 20:
                     self.ghost_max_time_scatter -= 20
                 self.load_map(True)
+
+            # Check if getting an extra life.
+            if not self.got_extra_life:
+                if self.current_score >= self.extra_life_score:
+                    self.lives += 1
+                    cur_image_rect = pygame.Rect(0, 0, 32, 32)
+                    self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_image_rect))
+                    self.got_extra_life = True
 
             # Update the game objects.
 
@@ -473,43 +503,58 @@ class GameSystem:
         # The fruit position y.
         fruit_position_y = 326
 
+        fruit_display_rect = pygame.Rect(0, 0, 32, 32)
+
         if self.cur_level == 0:
             self.game_obj_fruit = Fruit(fruit_position_x, fruit_position_y, 100,
                                         self.sprite_images["fruit_cherry.png"],
                                         self.sprite_images["100.png"])
+            self.fruit_display[self.cur_level] = (self.sprite_images["fruit_cherry.png"], fruit_display_rect)
         elif self.cur_level == 1:
             self.game_obj_fruit = Fruit(fruit_position_x, fruit_position_y, 300,
                                         self.sprite_images["fruit_strawberry.png"],
                                         self.sprite_images["300.png"])
+            self.fruit_display[self.cur_level] = (self.sprite_images["fruit_strawberry.png"], fruit_display_rect)
         elif self.cur_level == 2 or self.cur_level == 3:
             self.game_obj_fruit = Fruit(fruit_position_x, fruit_position_y, 500,
                                         self.sprite_images["fruit_orange.png"],
                                         self.sprite_images["500.png"])
+            self.fruit_display[self.cur_level] = (self.sprite_images["fruit_orange.png"], fruit_display_rect)
         elif self.cur_level == 4 or self.cur_level == 5:
             self.game_obj_fruit = Fruit(fruit_position_x, fruit_position_y, 700,
                                         self.sprite_images["fruit_apple.png"],
                                         self.sprite_images["700.png"])
+            self.fruit_display[self.cur_level] = (self.sprite_images["fruit_apple.png"], fruit_display_rect)
         elif self.cur_level == 6 or self.cur_level == 7:
             self.game_obj_fruit = Fruit(fruit_position_x, fruit_position_y, 1000,
                                         self.sprite_images["fruit_melon.png"],
                                         self.sprite_images["1000.png"])
+            self.fruit_display[self.cur_level] = (self.sprite_images["fruit_melon.png"], fruit_display_rect)
         elif self.cur_level == 8 or self.cur_level == 9:
             self.game_obj_fruit = Fruit(fruit_position_x, fruit_position_y, 2000,
                                         self.sprite_images["fruit_galaxian.png"],
                                         self.sprite_images["2000.png"])
+            self.fruit_display[self.cur_level] = (self.sprite_images["fruit_galaxian.png"], fruit_display_rect)
         elif self.cur_level == 10 or self.cur_level == 11:
             self.game_obj_fruit = Fruit(fruit_position_x, fruit_position_y, 3000,
                                         self.sprite_images["fruit_bell.png"],
                                         self.sprite_images["3000.png"])
+            self.fruit_display[self.cur_level] = (self.sprite_images["fruit_bell.png"], fruit_display_rect)
         elif self.cur_level > 11:
             self.game_obj_fruit = Fruit(fruit_position_x, fruit_position_y, 5000,
                                         self.sprite_images["fruit_key.png"],
                                         self.sprite_images["5000.png"])
+            self.fruit_display[self.cur_level] = (self.sprite_images["fruit_key.png"], fruit_display_rect)
 
         # Create Pacman.
         self.game_obj_player = Player(224, 424, self.dots_eaten, self.input_manager, self.game_objs_tiles,
                                       self.game_objs_dots, self.game_objs_pellets, self.game_obj_fruit,
                                       self.game_objs_ghosts, self.game_objs_text_boxes, self.sprite_images)
+
+        if self.cur_level < 9:
+            self.game_obj_player.max_anim_ate_pellet -= 64 * self.cur_level
+        else:
+            self.game_obj_player.max_anim_ate_pellet = 0
 
         # Create the ghost house entrance.
         self.game_obj_ghost_house_entrance = GhostHouseEntrance(224, 232, self.sprite_images)
@@ -541,15 +586,29 @@ class GameSystem:
         self.game_objs_ghosts.append(inky)
         self.game_objs_ghosts.append(clyde)
 
+        # Increase ghost speeds on certain levels.
+        if 10 <= self.cur_level > 0:
+            for ghost in self.game_objs_ghosts:
+                ghost.run_speed += 0.01 * float(self.cur_level)
+
         # Create the starting text.
         font1 = self.fonts["PressStart2P.ttf"]
 
         if self.cur_level == 0 and self.lives == 3:
-            text_1 = TextBox(225, 232, "PLAYER ONE", font1, (0, 255, 255))
+            text_1 = TextBox(225, 232, False, "PLAYER ONE", font1, (0, 255, 255))
             self.game_objs_text_boxes["PLAYER ONE"] = text_1
 
-        text_2 = TextBox(225, 328, "READY!", font1, (225, 255, 0))
+        text_2 = TextBox(225, 328, False, "READY!", font1, (255, 255, 0))
         self.game_objs_text_boxes["READY!"] = text_2
+
+        text_3 = TextBox(64, 20, False, "SCORE:", font1, (255, 255, 255))
+        self.game_objs_text_boxes["SCORE:"] = text_3
+
+        text_4 = TextBox(256, 20, False, "LIVES:", font1, (255, 255, 255))
+        self.game_objs_text_boxes["LIVES:"] = text_4
+
+        text_5 = TextBox(116, 12, True, "0", font1, (255, 255, 0))
+        self.game_objs_text_boxes["score"] = text_5
 
         # Set the ghost images to none if it is the first level with 3 lives.
         if self.cur_level == 0 and self.lives == 3:
@@ -588,6 +647,7 @@ class GameSystem:
                 self.game_objs_dots.remove(cur_game_obj)
                 self.game_obj_player.dots_eaten += 1
                 self.dots_eaten += 1
+                self.current_score += 10
 
         # Check for collisions between the player and the pellets.
         for cur_game_obj in self.game_objs_pellets:
@@ -599,6 +659,7 @@ class GameSystem:
                 self.game_obj_player.ate_pellet = True
                 self.game_obj_player.cur_anim_ate_pellet = 0
                 self.game_obj_player.streak = 0
+                self.current_score += 50
 
                 # Make all of the ghosts vulnerable to being eaten by pacman.
                 for ghost in self.game_objs_ghosts:
@@ -627,12 +688,16 @@ class GameSystem:
 
                         if self.game_obj_player.streak == 1:
                             ghost.image = self.sprite_images["200.png"]
+                            self.current_score += 200
                         elif self.game_obj_player.streak == 2:
                             ghost.image = self.sprite_images["400.png"]
+                            self.current_score += 400
                         elif self.game_obj_player.streak == 3:
                             ghost.image = self.sprite_images["800.png"]
+                            self.current_score += 800
                         elif self.game_obj_player.streak == 4:
                             ghost.image = self.sprite_images["1600.png"]
+                            self.current_score += 1600
 
                         self.game_obj_player.just_ate_ghost = True
                         self.game_obj_player.image = None
@@ -657,6 +722,7 @@ class GameSystem:
                     self.game_obj_player.collision_rect.colliderect(collision_rect_other):
                 if self.game_obj_fruit.despawning:
                     self.game_obj_fruit.eaten = True
+                    self.current_score += self.game_obj_fruit.score
 
         # Check for collisions between the ghosts and the ghost house entrance.
         for ghost in self.game_objs_ghosts:
@@ -696,10 +762,63 @@ class GameSystem:
         # Render all of the individual game objects that are ghosts.
         self.render_game_obj_group(self.game_objs_ghosts, False)
 
+        # Update the score text for rendering.
+        self.game_objs_text_boxes["score"].set_text(str(self.current_score))
+
         # Render all of the individual game objects that are text boxes.
         for key in self.game_objs_text_boxes:
             cur_text_box = self.game_objs_text_boxes[key]
             self.render_game_obj(cur_text_box, False)
+
+        # Render the fruit display.
+        keys = []
+        for key in sorted(self.fruit_display):
+            keys.append(key)
+
+        # The current fruit position x.
+        cur_fruit_pos_x = 430
+
+        # The current fruit position y.
+        cur_fruit_pos_y = 575
+
+        # We can only display up to 12 fruit
+        while len(keys) > 12:
+            keys.pop(0)
+
+        # Render every fruit in the list.
+        for key in keys:
+            # The current image being rendered.
+            cur_image = self.fruit_display[key][0]
+
+            # The rect of the current image being rendered.
+            cur_rect = self.fruit_display[key][1]
+
+            cur_rect.centerx = cur_fruit_pos_x
+            cur_rect.centery = cur_fruit_pos_y
+
+            cur_fruit_pos_x -= 32
+
+            # Blit the sprite to the backbuffer.
+            self.backbuffer.blit(cur_image, cur_rect)
+
+        cur_life_pos_x = 310
+        cur_life_pos_y = 20
+
+        # Render the lives the player has.
+        for life in self.lives_display:
+            # The current image being rendered.
+            cur_image = life[0]
+
+            # The rect of the current image being rendered.
+            cur_rect = life[1]
+
+            cur_rect.centerx = cur_life_pos_x
+            cur_rect.centery = cur_life_pos_y
+
+            cur_life_pos_x += 32
+
+            # Blit the sprite to the backbuffer.
+            self.backbuffer.blit(cur_image, cur_rect)
 
         # Debug rendering for the ghost's a star path.
 
