@@ -8,8 +8,8 @@ class InputManager:
         self.pressed_left = False
         self.pressed_right = False
         self.pressed_q = False
-        self.pressed_e = False
-        self.toggle_e = True
+        self.pressed_z = False
+        self.pressed_x = False
         self.game_system = game_system
 
     def check_events(self):
@@ -30,9 +30,10 @@ class InputManager:
                     self.pressed_down = True
                 elif event.key == pygame.K_q:
                     self.pressed_q = True
-                elif event.key == pygame.K_e and self.toggle_e:
-                    self.pressed_e = True
-                    self.toggle_e = False
+                elif event.key == pygame.K_z:
+                    self.pressed_z = True
+                elif event.key == pygame.K_x:
+                    self.pressed_x = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT:
                     self.pressed_right = False
@@ -44,5 +45,7 @@ class InputManager:
                     self.pressed_down = False
                 elif event.key == pygame.K_q:
                     self.pressed_q = False
-                elif event.key == pygame.K_e:
-                    self.toggle_e = True
+                elif event.key == pygame.K_z:
+                    self.pressed_z = False
+                elif event.key == pygame.K_x:
+                    self.pressed_x = False

@@ -17,9 +17,9 @@ class Fruit(GameObject):
 
         random.seed()
 
-        self.max_spawn_time = 400 + random.randint(-100, 200)
+        self.max_spawn_time = 500 + random.randint(-100, 100)
         self.cur_despawn_time = 0
-        self.max_despawn_time = 500 + random.randint(-50, 50)
+        self.max_despawn_time = 600 + random.randint(-50, 50)
         self.spawning = True
         self.despawning = False
         self.eaten = False

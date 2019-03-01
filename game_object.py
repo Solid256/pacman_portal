@@ -9,6 +9,7 @@ class GameObject(Sprite):
         self.position_y = float(y)
         self.image_rect = None
         self.sprites = None
+        self.marked_for_deletion = False
 
     def update_rect(self):
         self.image_rect.centerx = int(self.position_x)

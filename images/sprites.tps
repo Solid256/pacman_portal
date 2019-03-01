@@ -261,6 +261,14 @@
             <key type="filename">pinky_run_r2.png</key>
             <key type="filename">pinky_run_u1.png</key>
             <key type="filename">pinky_run_u2.png</key>
+            <key type="filename">portal_entrance_1_1.png</key>
+            <key type="filename">portal_entrance_1_2.png</key>
+            <key type="filename">portal_entrance_1_3.png</key>
+            <key type="filename">portal_entrance_2_1.png</key>
+            <key type="filename">portal_entrance_2_2.png</key>
+            <key type="filename">portal_entrance_2_3.png</key>
+            <key type="filename">portal_shot_1.png</key>
+            <key type="filename">portal_shot_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -524,6 +532,14 @@
             <filename>3000.png</filename>
             <filename>5000.png</filename>
             <filename>fruit_cherry.png</filename>
+            <filename>portal_shot_1.png</filename>
+            <filename>portal_shot_2.png</filename>
+            <filename>portal_entrance_2_3.png</filename>
+            <filename>portal_entrance_1_3.png</filename>
+            <filename>portal_entrance_1_1.png</filename>
+            <filename>portal_entrance_1_2.png</filename>
+            <filename>portal_entrance_2_1.png</filename>
+            <filename>portal_entrance_2_2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

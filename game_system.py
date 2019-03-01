@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ETree
 from input_manager import InputManager
 
 from background_tile import BackgroundTile
-from player import Player
+from pacman import Player
 from dot import Dot
 from pellet import Pellet
 from ghost import Ghost
@@ -11,6 +11,8 @@ from a_star_node import AStarNode
 from ghost_house_entrance import GhostHouseEntrance
 from fruit import Fruit
 from text_box import TextBox
+from portal_shot import PortalShot
+from portal_entrance import PortalEntrance
 
 
 class GameSystem:
@@ -47,6 +49,10 @@ class GameSystem:
         self.game_obj_player = None
         self.game_obj_fruit = None
         self.game_obj_ghost_house_entrance = None
+        self.portal_shot_1 = None
+        self.portal_shot_2 = None
+        self.portal_entrance_1 = None
+        self.portal_entrance_2 = None
         self.is_running = True
         self.lives = 3
         self.ghost_max_time_scatter = 400
@@ -198,6 +204,34 @@ class GameSystem:
             if self.game_obj_player is not None:
                 self.game_obj_player.update_obj()
 
+            # Check if creating the portal shots.
+            if self.game_obj_player.ready_mode == 2:
+                if self.input_manager.pressed_z and self.portal_shot_1 is None:
+                    self.portal_shot_1 = PortalShot(int(self.game_obj_player.position_x),
+                                                    int(self.game_obj_player.position_y), 0,
+                                                    self.sprite_images["portal_shot_1.png"],
+                                                    self.game_obj_player.run_direction)
+                    self.game_obj_player.portal_shot_1 = self.portal_shot_1
+
+                elif self.input_manager.pressed_x and self.portal_shot_2 is None:
+                    self.portal_shot_2 = PortalShot(int(self.game_obj_player.position_x),
+                                                    int(self.game_obj_player.position_y), 1,
+                                                    self.sprite_images["portal_shot_2.png"],
+                                                    self.game_obj_player.run_direction)
+                    self.game_obj_player.portal_shot_2 = self.portal_shot_2
+
+            # Update the portal shots.
+            if self.portal_shot_1 is not None:
+                self.portal_shot_1.update_obj()
+            if self.portal_shot_2 is not None:
+                self.portal_shot_2.update_obj()
+
+            # Update the portals.
+            if self.portal_entrance_1 is not None:
+                self.portal_entrance_1.update_obj()
+            if self.portal_entrance_2 is not None:
+                self.portal_entrance_2.update_obj()
+
             # Update the fruit.
             if self.game_obj_fruit is not None:
                 self.game_obj_fruit.update_obj()
@@ -208,6 +242,22 @@ class GameSystem:
 
             # Perform the collision detection.
             self.collision_detection()
+
+            # Remove game objects that are marked for deletion.
+            if self.game_obj_fruit is not None and self.game_obj_fruit.marked_for_deletion:
+                self.game_obj_fruit = None
+
+            if self.portal_shot_1 is not None and self.portal_shot_1.marked_for_deletion:
+                self.portal_shot_1 = None
+
+            if self.portal_shot_2 is not None and self.portal_shot_2.marked_for_deletion:
+                self.portal_shot_2 = None
+
+            if self.portal_entrance_1 is not None and self.portal_entrance_1.marked_for_deletion:
+                self.portal_entrance_1 = None
+
+            if self.portal_entrance_2 is not None and self.portal_entrance_2.marked_for_deletion:
+                self.portal_entrance_2 = None
 
             # Render the game objects.
             self.render_game_objects()
@@ -231,6 +281,10 @@ class GameSystem:
         self.game_objs_tiles.clear()
         self.game_obj_player = None
         self.game_obj_fruit = None
+        self.portal_shot_1 = None
+        self.portal_shot_2 = None
+        self.portal_entrance_1 = None
+        self.portal_entrance_2 = None
         self.a_star_list.clear()
 
         # The map file being read to create the map objects. Use with statement to ensure the file closes after reading
@@ -549,7 +603,8 @@ class GameSystem:
         # Create Pacman.
         self.game_obj_player = Player(224, 424, self.dots_eaten, self.input_manager, self.game_objs_tiles,
                                       self.game_objs_dots, self.game_objs_pellets, self.game_obj_fruit,
-                                      self.game_objs_ghosts, self.game_objs_text_boxes, self.sprite_images)
+                                      self.game_objs_ghosts,
+                                      self.game_objs_text_boxes, self.sprite_images)
 
         if self.cur_level < 9:
             self.game_obj_player.max_anim_ate_pellet -= 64 * self.cur_level
@@ -712,6 +767,8 @@ class GameSystem:
                         self.game_obj_player.is_running = False
                         self.game_objs_ghosts.clear()
                         self.game_obj_fruit = None
+                        self.portal_shot_1 = None
+                        self.portal_shot_2 = None
                         pygame.time.wait(1200)
 
         # Check for collisions between the player and the fruit.
@@ -736,6 +793,82 @@ class GameSystem:
                     ghost.position_x = 224
                     ghost.spawn_mode = 4
 
+        # Check for collisions between the portal shot and the portal entrances.
+        if self.portal_entrance_1 is not None:
+            collision_rect_other = self.portal_entrance_1.collision_rect
+            if self.portal_shot_1 is not None and \
+                    self.portal_shot_1.collision_rect.colliderect(collision_rect_other):
+                self.portal_shot_1.marked_for_deletion = True
+
+            if self.portal_shot_2 is not None and \
+                    self.portal_shot_2.collision_rect.colliderect(collision_rect_other):
+                self.portal_shot_2.marked_for_deletion = True
+
+        if self.portal_entrance_2 is not None:
+            collision_rect_other = self.portal_entrance_2.collision_rect
+            if self.portal_shot_1 is not None and \
+                    self.portal_shot_1.collision_rect.colliderect(collision_rect_other):
+                self.portal_shot_1.marked_for_deletion = True
+
+            if self.portal_shot_2 is not None and \
+                    self.portal_shot_2.collision_rect.colliderect(collision_rect_other):
+                self.portal_shot_2.marked_for_deletion = True
+
+        # Check for collisions between the portal shot and the walls.
+        for wall in self.game_objs_tiles:
+            collision_rect_other = wall.collision_rect
+
+            # Checks if a portal was already created so that another portal cannot be created.
+            portal_created = False
+
+            if collision_rect_other is not None:
+                if self.portal_shot_1 is not None and not self.portal_shot_1.marked_for_deletion and \
+                        self.portal_shot_1.collision_rect.colliderect(collision_rect_other):
+                    if self.portal_entrance_1 is None or \
+                            (self.portal_entrance_1 is not None and not self.portal_entrance_1.in_use):
+                        self.portal_entrance_1 = PortalEntrance(wall.position_x, wall.position_y, 0,
+                                                                self.portal_shot_1.direction,
+                                                                self.sprite_images["portal_entrance_1_1.png"],
+                                                                self.sprite_images["portal_entrance_1_2.png"],
+                                                                self.sprite_images["portal_entrance_1_3.png"])
+                        self.game_obj_player.portal_entrance_1 = self.portal_entrance_1
+                    self.portal_shot_1 = None
+                    portal_created = True
+
+                if not portal_created and \
+                        self.portal_shot_2 is not None and not self.portal_shot_2.marked_for_deletion and \
+                        self.portal_shot_2.collision_rect.colliderect(collision_rect_other):
+                    if self.portal_entrance_2 is None or \
+                            (self.portal_entrance_2 is not None and not self.portal_entrance_2.in_use):
+                        self.portal_entrance_2 = PortalEntrance(wall.position_x, wall.position_y, 0,
+                                                                self.portal_shot_2.direction,
+                                                                self.sprite_images["portal_entrance_2_1.png"],
+                                                                self.sprite_images["portal_entrance_2_2.png"],
+                                                                self.sprite_images["portal_entrance_2_3.png"])
+                        self.game_obj_player.portal_entrance_2 = self.portal_entrance_2
+                    self.portal_shot_2 = None
+
+        # Check for collisions between the portal shot and the ghosts.
+        for ghost in self.game_objs_ghosts:
+            collision_rect_other = ghost.collision_rect
+
+            if collision_rect_other is not None:
+                if self.portal_shot_1 is not None and \
+                        self.portal_shot_1.collision_rect.colliderect(collision_rect_other):
+                    self.portal_shot_1 = None
+
+                if self.portal_shot_2 is not None and \
+                        self.portal_shot_2.collision_rect.colliderect(collision_rect_other):
+                    self.portal_shot_2 = None
+
+        # Check for collisions between the portal entrance and another portal entrance.
+        if self.portal_entrance_1 is not None and self.portal_entrance_2 is not None:
+            collision_rect_other = self.portal_entrance_1.collision_rect
+
+            if collision_rect_other is not None:
+                if self.portal_entrance_2.collision_rect.colliderect(collision_rect_other):
+                    self.portal_entrance_1.marked_for_deletion = True
+
     def render_game_objects(self):
         """Render all the game objects to the screen. Objects are rendered in order from tiles, to dots, to pacman, to
         ghosts."""
@@ -744,6 +877,13 @@ class GameSystem:
 
         # Render all of the individual game objects that are tiles.
         self.render_game_obj_group(self.game_objs_tiles, False)
+
+        # Render the portal entrances.
+        if self.portal_entrance_1 is not None:
+            self.render_game_obj(self.portal_entrance_1, True)
+
+        if self.portal_entrance_2 is not None:
+            self.render_game_obj(self.portal_entrance_2, True)
 
         # Render all of the individual game objects that are dots.
         self.render_game_obj_group(self.game_objs_dots, False)
@@ -761,6 +901,13 @@ class GameSystem:
 
         # Render all of the individual game objects that are ghosts.
         self.render_game_obj_group(self.game_objs_ghosts, False)
+
+        # Render the portal shots.
+        if self.portal_shot_1 is not None:
+            self.render_game_obj(self.portal_shot_1, True)
+
+        if self.portal_shot_2 is not None:
+            self.render_game_obj(self.portal_shot_2, True)
 
         # Update the score text for rendering.
         self.game_objs_text_boxes["score"].set_text(str(self.current_score))
