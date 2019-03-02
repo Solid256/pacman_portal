@@ -255,9 +255,15 @@ class GameSystem:
 
             if self.portal_entrance_1 is not None and self.portal_entrance_1.marked_for_deletion:
                 self.portal_entrance_1 = None
+                self.game_obj_player.portal_entrance_1 = None
+                for ghost in self.game_objs_ghosts:
+                    ghost.portal_entrance_1 = None
 
             if self.portal_entrance_2 is not None and self.portal_entrance_2.marked_for_deletion:
                 self.portal_entrance_2 = None
+                self.game_obj_player.portal_entrance_2 = None
+                for ghost in self.game_objs_ghosts:
+                    ghost.portal_entrance_2 = None
 
             # Render the game objects.
             self.render_game_objects()
@@ -619,7 +625,7 @@ class GameSystem:
         # Create Blinky.
         blinky = Ghost(224, 232, 0, self.ghost_cur_time_scatter, self.game_obj_player, self.a_star_array,
                        self.a_star_list, self.game_objs_tiles, self.game_obj_ghost_house_entrance, None,
-                       self.sprite_images)
+                      self.sprite_images)
 
         # Create Pinky.
         pinky = Ghost(224, 280, 1, self.ghost_cur_time_scatter, self.game_obj_player, self.a_star_array,
@@ -637,14 +643,24 @@ class GameSystem:
                       self.sprite_images)
 
         self.game_objs_ghosts.append(blinky)
-        self.game_objs_ghosts.append(pinky)
+        '''self.game_objs_ghosts.append(pinky)
         self.game_objs_ghosts.append(inky)
-        self.game_objs_ghosts.append(clyde)
+        self.game_objs_ghosts.append(clyde)'''
 
         # Increase ghost speeds on certain levels.
         if 10 <= self.cur_level > 0:
             for ghost in self.game_objs_ghosts:
                 ghost.run_speed += 0.01 * float(self.cur_level)
+
+        # Allow certain ghosts to travel through portals at certain levels.
+        if self.cur_level >= 4:
+            clyde.can_travel_through_portals = True
+        if self.cur_level >= 6:
+            inky.can_travel_through_portals = True
+        if self.cur_level >= 8:
+            blinky.can_travel_through_portals = True
+        if self.cur_level >= 10:
+            pinky.can_travel_through_portals = True
 
         # Create the starting text.
         font1 = self.fonts["PressStart2P.ttf"]
@@ -677,21 +693,22 @@ class GameSystem:
 
     def collision_detection(self):
         # Check for collisions between the player and the walls.
-        for cur_game_obj in self.game_objs_tiles:
-            collision_rect_other = cur_game_obj.collision_rect
+        if self.game_obj_player is not None and not self.game_obj_player.is_traveling:
+            for cur_game_obj in self.game_objs_tiles:
+                collision_rect_other = cur_game_obj.collision_rect
 
-            if collision_rect_other is not None and \
-                    self.game_obj_player.collision_rect.colliderect(collision_rect_other):
-                self.game_obj_player.is_running = False
+                if collision_rect_other is not None and \
+                        self.game_obj_player.collision_rect.colliderect(collision_rect_other):
+                    self.game_obj_player.is_running = False
 
-                if self.game_obj_player.run_direction == 0:
-                    self.game_obj_player.position_x = cur_game_obj.position_x + collision_rect_other.width
-                elif self.game_obj_player.run_direction == 1:
-                    self.game_obj_player.position_x = cur_game_obj.position_x - collision_rect_other.width
-                elif self.game_obj_player.run_direction == 2:
-                    self.game_obj_player.position_y = cur_game_obj.position_y + collision_rect_other.height
-                elif self.game_obj_player.run_direction == 3:
-                    self.game_obj_player.position_y = cur_game_obj.position_y - collision_rect_other.height
+                    if self.game_obj_player.run_direction == 0:
+                        self.game_obj_player.position_x = cur_game_obj.position_x + collision_rect_other.width
+                    elif self.game_obj_player.run_direction == 1:
+                        self.game_obj_player.position_x = cur_game_obj.position_x - collision_rect_other.width
+                    elif self.game_obj_player.run_direction == 2:
+                        self.game_obj_player.position_y = cur_game_obj.position_y + collision_rect_other.height
+                    elif self.game_obj_player.run_direction == 3:
+                        self.game_obj_player.position_y = cur_game_obj.position_y - collision_rect_other.height
 
         # Check for collisions between the player and the dots.
         for cur_game_obj in self.game_objs_dots:
@@ -832,6 +849,8 @@ class GameSystem:
                                                                 self.sprite_images["portal_entrance_1_2.png"],
                                                                 self.sprite_images["portal_entrance_1_3.png"])
                         self.game_obj_player.portal_entrance_1 = self.portal_entrance_1
+                        for ghost in self.game_objs_ghosts:
+                            ghost.portal_entrance_1 = self.portal_entrance_1
                     self.portal_shot_1 = None
                     portal_created = True
 
@@ -846,6 +865,8 @@ class GameSystem:
                                                                 self.sprite_images["portal_entrance_2_2.png"],
                                                                 self.sprite_images["portal_entrance_2_3.png"])
                         self.game_obj_player.portal_entrance_2 = self.portal_entrance_2
+                        for ghost in self.game_objs_ghosts:
+                            ghost.portal_entrance_2 = self.portal_entrance_2
                     self.portal_shot_2 = None
 
         # Check for collisions between the portal shot and the ghosts.

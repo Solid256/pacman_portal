@@ -132,6 +132,11 @@ class Player(GameObject):
         # 2 - Ready!
         # 3 - Game over!
         self.ready_mode = 0
+        self.in_portal = False
+        self.leaving_portal = False
+        self.cur_anim_portal = 0
+        self.max_anim_portal = 6
+        self.portal_index = 0
 
     def update_obj(self):
 
@@ -230,10 +235,133 @@ class Player(GameObject):
                     # Checks if the player is able to change direction.
                     is_able_change_direction = True
 
+                    # The position x of Pac-Man aligned with the grid.
+                    pacman_aligned_position_x = int(int(self.position_x / 16) * 16) + 8
+
+                    # The position y of Pac-Man aligned with the grid.
+                    pacman_aligned_position_y = int(int(self.position_y / 16) * 16) + 8
+
+                    # Check if Pac-Man is entering a portal. If so make the player start traveling.
+                    if self.portal_entrance_1 is not None and self.portal_entrance_2 is not None and \
+                            not self.is_traveling and not self.in_portal and not self.leaving_portal and \
+                            not self.portal_entrance_1.in_use and not self.portal_entrance_2.in_use:
+
+                        if self.portal_entrance_1.direction == 0:
+                            pacman_aligned_position_x -= 16
+                        if self.portal_entrance_1.direction == 1:
+                            pacman_aligned_position_x += 16
+                        if self.portal_entrance_1.direction == 2:
+                            pacman_aligned_position_y -= 16
+                        if self.portal_entrance_1.direction == 3:
+                            pacman_aligned_position_y += 16
+
+                        if pacman_aligned_position_x == self.portal_entrance_1.position_x and \
+                                pacman_aligned_position_y == self.portal_entrance_1.position_y and \
+                                ((self.portal_entrance_1.direction == 0 and self.input_manager.pressed_left) or
+                                    (self.portal_entrance_1.direction == 1 and self.input_manager.pressed_right) or
+                                    (self.portal_entrance_1.direction == 2 and self.input_manager.pressed_up) or
+                                    (self.portal_entrance_1.direction == 3 and self.input_manager.pressed_down)):
+
+                                self.portal_entrance_1.in_use = True
+                                self.portal_entrance_2.in_use = True
+                                self.is_traveling = True
+                                self.in_portal = True
+                                self.is_running = True
+                                self.portal_index = 0
+                                self.run_direction = self.portal_entrance_1.direction
+
+                                if self.portal_entrance_1.direction == 0:
+                                    self.angle = 180
+                                if self.portal_entrance_1.direction == 1:
+                                    self.angle = 0
+                                if self.portal_entrance_1.direction == 2:
+                                    self.angle = 90
+                                if self.portal_entrance_1.direction == 3:
+                                    self.angle = 270
+                        else:
+                            pacman_aligned_position_x = int(int(self.position_x / 16) * 16) + 8
+                            pacman_aligned_position_y = int(int(self.position_y / 16) * 16) + 8
+
+                            if self.portal_entrance_2.direction == 0:
+                                pacman_aligned_position_x -= 16
+                            if self.portal_entrance_2.direction == 1:
+                                pacman_aligned_position_x += 16
+                            if self.portal_entrance_2.direction == 2:
+                                pacman_aligned_position_y -= 16
+                            if self.portal_entrance_2.direction == 3:
+                                pacman_aligned_position_y += 16
+
+                            if pacman_aligned_position_x == self.portal_entrance_2.position_x and \
+                                    pacman_aligned_position_y == self.portal_entrance_2.position_y and \
+                                    ((self.portal_entrance_2.direction == 0 and self.input_manager.pressed_left) or
+                                        (self.portal_entrance_2.direction == 1 and self.input_manager.pressed_right) or
+                                        (self.portal_entrance_2.direction == 2 and self.input_manager.pressed_up) or
+                                        (self.portal_entrance_2.direction == 3 and self.input_manager.pressed_down)):
+
+                                    self.portal_entrance_1.in_use = True
+                                    self.portal_entrance_2.in_use = True
+                                    self.is_traveling = True
+                                    self.in_portal = True
+                                    self.is_running = True
+                                    self.portal_index = 1
+                                    self.run_direction = self.portal_entrance_2.direction
+
+                                    if self.portal_entrance_2.direction == 0:
+                                        self.angle = 180
+                                    if self.portal_entrance_2.direction == 1:
+                                        self.angle = 0
+                                    if self.portal_entrance_2.direction == 2:
+                                        self.angle = 90
+                                    if self.portal_entrance_2.direction == 3:
+                                        self.angle = 270
+
+                    if self.in_portal:
+                        if self.cur_anim_portal >= self.max_anim_portal:
+                            self.cur_anim_portal = 0
+                            self.leaving_portal = True
+                            self.in_portal = False
+
+                            cur_portal = None
+
+                            if self.portal_index == 0:
+                                cur_portal = self.portal_entrance_2
+                            else:
+                                cur_portal = self.portal_entrance_1
+
+                            self.run_direction = cur_portal.direction
+
+                            if cur_portal.direction == 0:
+                                self.run_direction = 1
+                                self.angle = 0
+                            if cur_portal.direction == 1:
+                                self.run_direction = 0
+                                self.angle = 180
+                            if cur_portal.direction == 2:
+                                self.run_direction = 3
+                                self.angle = 270
+                            if cur_portal.direction == 3:
+                                self.run_direction = 2
+                                self.angle = 90
+
+                            self.position_x = cur_portal.position_x
+                            self.position_y = cur_portal.position_y
+                        else:
+                            self.cur_anim_portal += 1
+
+                    elif self.leaving_portal:
+                        if self.cur_anim_portal >= self.max_anim_portal:
+                            self.cur_anim_portal = 0
+                            self.leaving_portal = False
+                            self.is_traveling = False
+                            self.portal_entrance_1.in_use = False
+                            self.portal_entrance_2.in_use = False
+                        else:
+                            self.cur_anim_portal += 1
+
                     # Check if the player is traveling or not.
                     if self.position_x < 8 or self.position_x > 440:
                         self.is_traveling = True
-                    else:
+                    elif not self.in_portal and not self.leaving_portal:
                         self.is_traveling = False
 
                     # Only allow player input if pacman isn't traveling.

@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="18240574-6ba4-4913-9afd-603480c8a373" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/pacman_portal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fruit.py" beforeDir="false" afterPath="$PROJECT_DIR$/fruit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_object.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_object.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_system.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/portal_entrance_1_3.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/portal_entrance_1_3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/portal_entrance_2_3.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/portal_entrance_2_3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/sprites.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/sprites.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/sprites.tps" beforeDir="false" afterPath="$PROJECT_DIR$/images/sprites.tps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/sprites.xml" beforeDir="false" afterPath="$PROJECT_DIR$/images/sprites.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/input_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ghost.py" beforeDir="false" afterPath="$PROJECT_DIR$/ghost.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pacman.py" beforeDir="false" afterPath="$PROJECT_DIR$/pacman.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/player.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal_entrance.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal_entrance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal_shot.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal_shot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,22 +18,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/input_manager.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="43" column="48" lean-forward="true" selection-start-line="43" selection-start-column="48" selection-end-line="43" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game_system.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="1031" column="21" lean-forward="true" selection-start-line="1031" selection-start-column="21" selection-end-line="1031" selection-end-column="21" />
+            <state relative-caret-position="281">
+              <caret line="689" column="30" lean-forward="true" selection-start-line="689" selection-start-column="30" selection-end-line="689" selection-end-column="30" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <element signature="e#27887#28816#0" />
                 <element signature="e#31538#31922#0" />
                 <element signature="e#29419#30385#0" />
                 <element signature="e#30509#32374#0" />
@@ -82,7 +61,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/portal_entrance.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
+            <state relative-caret-position="26">
               <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
@@ -122,10 +101,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ghost.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-11143">
+              <caret line="368" column="97" selection-start-line="368" selection-start-column="97" selection-end-line="368" selection-end-column="97" />
+              <folding>
+                <element signature="e#0#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pacman.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="188" column="46" selection-start-line="188" selection-start-column="46" selection-end-line="188" selection-end-column="46" />
+            <state relative-caret-position="264">
+              <caret line="358" column="53" lean-forward="true" selection-start-line="317" selection-start-column="20" selection-end-line="358" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -157,7 +148,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pacman.py" />
         <option value="$PROJECT_DIR$/gamesystem.py" />
         <option value="$PROJECT_DIR$/wall.py" />
         <option value="$PROJECT_DIR$/pellet.py" />
@@ -166,7 +156,6 @@
         <option value="$PROJECT_DIR$/a_star_node.py" />
         <option value="$PROJECT_DIR$/background_tile.py" />
         <option value="$PROJECT_DIR$/textbox.py" />
-        <option value="$PROJECT_DIR$/ghost.py" />
         <option value="$PROJECT_DIR$/text_box.py" />
         <option value="$PROJECT_DIR$/fruit.py" />
         <option value="$PROJECT_DIR$/input_manager.py" />
@@ -174,7 +163,9 @@
         <option value="$PROJECT_DIR$/portal_entrance.py" />
         <option value="$PROJECT_DIR$/portal_shot.py" />
         <option value="$PROJECT_DIR$/player.py" />
+        <option value="$PROJECT_DIR$/pacman.py" />
         <option value="$PROJECT_DIR$/game_system.py" />
+        <option value="$PROJECT_DIR$/ghost.py" />
       </list>
     </option>
   </component>
@@ -289,8 +280,8 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" order="0" sideWeight="0.50203526" side_tool="true" weight="0.17860906" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.4979647" visible="true" weight="0.17860906" />
+      <window_info id="Favorites" order="0" sideWeight="0.50203526" side_tool="true" visible="true" weight="0.17860906" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4979647" visible="true" weight="0.17860906" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Messages" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.3296582" />
@@ -299,7 +290,7 @@
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="bottom" id="Version Control" order="5" />
-      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.49947312" visible="true" weight="0.20151679" />
+      <window_info active="true" anchor="bottom" id="Run" order="6" sideWeight="0.49947312" visible="true" weight="0.20151679" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -375,13 +366,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ghost.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-680">
-          <caret line="81" column="58" lean-forward="true" selection-start-line="81" selection-start-column="58" selection-end-line="81" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/pygame/sprite.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
@@ -389,27 +373,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fruit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-76">
-          <caret line="19" column="61" lean-forward="true" selection-start-line="19" selection-start-column="61" selection-end-line="19" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/input_manager.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="451">
           <caret line="43" column="48" lean-forward="true" selection-start-line="43" selection-start-column="48" selection-end-line="43" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game_object.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="40" lean-forward="true" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -427,32 +394,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/portal_entrance.py">
+    <entry file="file://$PROJECT_DIR$/fruit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+        <state relative-caret-position="-76">
+          <caret line="19" column="61" lean-forward="true" selection-start-line="19" selection-start-column="61" selection-end-line="19" selection-end-column="61" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game_system.py">
+    <entry file="file://$PROJECT_DIR$/game_object.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="1031" column="21" lean-forward="true" selection-start-line="1031" selection-start-column="21" selection-end-line="1031" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#27887#28816#0" />
-            <element signature="e#31538#31922#0" />
-            <element signature="e#29419#30385#0" />
-            <element signature="e#30509#32374#0" />
-            <element signature="e#35391#35766#0" />
-            <element signature="e#32942#33352#0" />
-            <element signature="e#36343#36433#0" />
-            <element signature="e#36500#37183#0" />
-            <element signature="e#37231#37267#0" />
-          </folding>
+        <state relative-caret-position="187">
+          <caret line="11" column="40" lean-forward="true" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -462,6 +417,41 @@
           <caret line="42" column="56" lean-forward="true" selection-start-line="42" selection-start-column="56" selection-end-line="42" selection-end-column="56" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal_entrance.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pacman.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="358" column="53" lean-forward="true" selection-start-line="317" selection-start-column="20" selection-end-line="358" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game_system.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="689" column="30" lean-forward="true" selection-start-line="689" selection-start-column="30" selection-end-line="689" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#31538#31922#0" />
+            <element signature="e#29419#30385#0" />
+            <element signature="e#30509#32374#0" />
+            <element signature="e#35391#35766#0" />
+            <element signature="e#32942#33352#0" />
+            <element signature="e#36343#36433#0" />
+            <element signature="e#36500#37183#0" />
+            <element signature="e#37231#37267#0" />
           </folding>
         </state>
       </provider>
@@ -476,10 +466,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pacman.py">
+    <entry file="file://$PROJECT_DIR$/ghost.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="188" column="46" selection-start-line="188" selection-start-column="46" selection-end-line="188" selection-end-column="46" />
+        <state relative-caret-position="-11143">
+          <caret line="368" column="97" selection-start-line="368" selection-start-column="97" selection-end-line="368" selection-end-column="97" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

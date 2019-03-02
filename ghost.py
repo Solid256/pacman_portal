@@ -1,6 +1,7 @@
 from game_object import GameObject
 
 import pygame
+import random
 
 
 class Ghost(GameObject):
@@ -13,6 +14,8 @@ class Ghost(GameObject):
         self.a_star_list = a_star_list
         self.walls = walls
         self.ghost_house_entrance = ghost_house_entrance
+        self.portal_entrance_1 = None
+        self.portal_entrance_2 = None
         self.blinky = blinky
         self.sprites = sprites
         self.is_vulnerable = False
@@ -24,6 +27,10 @@ class Ghost(GameObject):
         self.extra_movement = 0
         self.prev_turn_node = None
         self.clyde_wait = 0
+        self.can_travel_through_portals = False
+
+        # Set up the random seed.
+        random.seed()
 
         # The direction that the ghost is running.
         # 0 - left.
@@ -211,6 +218,12 @@ class Ghost(GameObject):
 
         self.active = False
 
+        self.in_portal = False
+        self.leaving_portal = False
+        self.cur_anim_portal = 0
+        self.max_anim_portal = 6
+        self.portal_index = 0
+
     def update_obj(self):
         if self.active:
             self.extra_movement = 0.0
@@ -297,7 +310,108 @@ class Ghost(GameObject):
                             not self.prev_turn_node[1] == self.a_star_ghost_index_y):
                         # If the wall was not found, allow the a star algorithm to take place.
                         if not found_wall_1 or not found_wall_2:
-                            self.run_direction = self.a_star()
+
+                            ghost_aligned_position_x = self.a_star_ghost_index_x * 16 + 8
+                            ghost_aligned_position_y = self.a_star_ghost_index_y * 16 + 8
+
+                            # Check for the existence of a portal. If one exists, go right ahead and decide to either go
+                            # through the portal or follow the a star algorithm.
+                            # Check if Pac-Man is entering a portal. If so make the player start traveling.
+                            if self.can_travel_through_portals and self.portal_entrance_1 is not None and \
+                                    self.portal_entrance_2 is not None and \
+                                    not self.run_mode == 2 and not self.in_portal and not self.leaving_portal and \
+                                    not self.portal_entrance_1.in_use and not self.portal_entrance_2.in_use:
+
+                                # The chance that the ghost will go through the portal.
+                                chance_portal = random.randint(0, 3)
+
+                                if chance_portal >= 2:
+                                    if self.portal_entrance_1.direction == 0:
+                                        ghost_aligned_position_x -= 16
+                                    if self.portal_entrance_1.direction == 1:
+                                        ghost_aligned_position_x += 16
+                                    if self.portal_entrance_1.direction == 2:
+                                        ghost_aligned_position_y -= 16
+                                    if self.portal_entrance_1.direction == 3:
+                                        ghost_aligned_position_y += 16
+
+                                    if ghost_aligned_position_x == self.portal_entrance_1.position_x and \
+                                            ghost_aligned_position_y == self.portal_entrance_1.position_y:
+
+                                        self.portal_entrance_1.in_use = True
+                                        self.portal_entrance_2.in_use = True
+                                        self.run_mode = 2
+                                        self.in_portal = True
+                                        self.portal_index = 0
+                                        self.run_direction = self.portal_entrance_1.direction
+
+                                    else:
+                                        ghost_aligned_position_x = self.a_star_ghost_index_x * 16 + 8
+                                        ghost_aligned_position_y = self.a_star_ghost_index_y * 16 + 8
+
+                                        if self.portal_entrance_2.direction == 0:
+                                            ghost_aligned_position_x -= 16
+                                        if self.portal_entrance_2.direction == 1:
+                                            ghost_aligned_position_x += 16
+                                        if self.portal_entrance_2.direction == 2:
+                                            ghost_aligned_position_y -= 16
+                                        if self.portal_entrance_2.direction == 3:
+                                            ghost_aligned_position_y += 16
+
+                                        if ghost_aligned_position_x == self.portal_entrance_2.position_x and \
+                                                ghost_aligned_position_y == self.portal_entrance_2.position_y:
+
+                                            self.portal_entrance_1.in_use = True
+                                            self.portal_entrance_2.in_use = True
+                                            self.run_mode = 2
+                                            self.in_portal = True
+                                            self.portal_index = 1
+                                            self.run_direction = self.portal_entrance_2.direction
+
+                            if not self.run_mode == 2:
+                                self.run_direction = self.a_star()
+
+            # Check if changing direction for the portal animations.
+            if self.run_mode == 2:
+                if self.in_portal:
+                    if self.cur_anim_portal >= self.max_anim_portal:
+                        self.cur_anim_portal = 0
+                        self.leaving_portal = True
+                        self.in_portal = False
+
+                        cur_portal = None
+
+                        if self.portal_index == 0:
+                            cur_portal = self.portal_entrance_2
+                        else:
+                            cur_portal = self.portal_entrance_1
+
+                        self.run_direction = cur_portal.direction
+
+                        if cur_portal.direction == 0:
+                            self.run_direction = 1
+                        if cur_portal.direction == 1:
+                            self.run_direction = 0
+                        if cur_portal.direction == 2:
+                            self.run_direction = 3
+                        if cur_portal.direction == 3:
+                            self.run_direction = 2
+
+                        self.position_x = cur_portal.position_x
+                        self.position_y = cur_portal.position_y
+                    else:
+                        self.cur_anim_portal += 1
+
+                elif self.leaving_portal:
+                    if self.cur_anim_portal >= self.max_anim_portal:
+                        self.cur_anim_portal = 0
+                        self.leaving_portal = False
+                        self.run_mode = self.timed_run_mode
+                        self.portal_entrance_1.in_use = False
+                        self.portal_entrance_2.in_use = False
+                        self.prev_turn_node = None
+                    else:
+                        self.cur_anim_portal += 1
 
             if self.is_running:
                 if self.run_mode == 2:
