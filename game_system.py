@@ -1,5 +1,6 @@
 import pygame
 import xml.etree.ElementTree as ETree
+import struct
 from input_manager import InputManager
 
 from background_tile import BackgroundTile
@@ -121,6 +122,16 @@ class GameSystem:
         self.cur_anim_title_5 = 0
         self.max_anim_title_5 = 125
 
+        self.high_scores = []
+
+        in_file = open("high_scores.bin", "rb")
+
+        for x in range(0, 20):
+            cur_score = struct.unpack('i', in_file.read(4))[0]
+            self.high_scores.append(cur_score)
+
+        in_file.close()
+
         # Begin the game.
         self.setup_pygame()
         self.load_sprite_images()
@@ -202,7 +213,17 @@ class GameSystem:
             self.sprite_images[name] = cur_image
 
     def setup_menu(self):
-        print("Main title.")
+        self.game_objs_title_images.clear()
+        self.game_objs_buttons.clear()
+        self.game_objs_text_boxes.clear()
+
+        self.cur_anim_title_1 = 0
+        self.cur_anim_title_pacman = 0
+        self.cur_anim_title_2 = 0
+        self.cur_anim_title_3 = 0
+        self.cur_anim_title_4 = 0
+        self.cur_anim_title_5 = 0
+        self.title_anim_mode = 0
 
         font1 = self.fonts["PressStart2P-big"]
         font2 = self.fonts["PressStart2P-medium"]
@@ -289,6 +310,29 @@ class GameSystem:
 
         self.load_map(True)
 
+    def setup_high_score_table(self):
+        self.game_objs_title_images.clear()
+        self.game_objs_buttons.clear()
+        self.game_objs_text_boxes.clear()
+
+        font2 = self.fonts["PressStart2P-medium"]
+        font3 = self.fonts["PressStart2P-small"]
+
+        text_1 = TextBox(232, 60, False, "HIGH SCORES", font2, (255, 255, 150))
+        self.game_objs_text_boxes["high_scores"] = text_1
+
+        offset_y = 100
+
+        for score in self.high_scores:
+            text_2 = TextBox(232, offset_y, False, str(score), font3, (255, 255, 0))
+            self.game_objs_text_boxes["score_1" + str(offset_y)] = text_2
+
+            offset_y += 20
+
+        high_scores_button = Button(232, 530, 2, "BACK", (100, 100, 100), (200, 200, 200),
+                                    font2, self.input_manager)
+        self.game_objs_buttons.append(high_scores_button)
+
     def main_loop(self):
         """The main loop for the game."""
 
@@ -314,6 +358,12 @@ class GameSystem:
                         if button.type == 0:
                             self.game_mode = 1
                             self.setup_game()
+                        elif button.type == 1:
+                            self.game_mode = 3
+                            self.setup_high_score_table()
+                        elif button.type == 2:
+                            self.game_mode = 0
+                            self.setup_menu()
 
             # Animate the title screen.
             if self.game_mode == 0:
@@ -659,6 +709,8 @@ class GameSystem:
                         self.game_objs_text_boxes["OVER"] = text_4
 
                         self.game_obj_player = None
+                        self.add_new_high_score(self.current_score)
+                        self.export_new_high_scores()
 
                 elif self.game_obj_player.finished_map_finished_anim:
                     self.cur_level += 1
@@ -1566,6 +1618,26 @@ class GameSystem:
             else:
                 # Blit the sprite to the backbuffer.
                 self.backbuffer.blit(cur_image, cur_rect)
+
+    def add_new_high_score(self, high_score):
+
+        # Add the new high score by comparing to other high scores.
+        for x in range(0, len(self.high_scores)):
+            if high_score >= self.high_scores[x]:
+                self.high_scores.insert(x, int(high_score))
+                self.high_scores.pop()
+                break
+
+    def export_new_high_scores(self):
+
+        # The out file for the high scores.
+        out_file = open("high_scores.bin", "wb")
+
+        for x in range(0, 20):
+            cur_score = struct.pack('i', self.high_scores[x])
+            out_file.write(cur_score)
+
+        out_file.close()
 
     @staticmethod
     def clean_up():
