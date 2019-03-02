@@ -7,6 +7,7 @@ class GameObject(Sprite):
 
         self.position_x = float(x)
         self.position_y = float(y)
+        self.angle = 0
         self.image_rect = None
         self.sprites = None
         self.marked_for_deletion = False

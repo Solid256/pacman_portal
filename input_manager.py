@@ -10,10 +10,14 @@ class InputManager:
         self.pressed_q = False
         self.pressed_z = False
         self.pressed_x = False
+        self.mouse_button_pressed = False
+        self.mouse_x = 0
+        self.mouse_y = 0
         self.game_system = game_system
 
     def check_events(self):
         """Respond to keypress and keyrelease events."""
+        self.mouse_button_pressed = False
         for event in pygame.event.get():
 
             # The quit, keydown and keyup events.
@@ -49,3 +53,8 @@ class InputManager:
                     self.pressed_z = False
                 elif event.key == pygame.K_x:
                     self.pressed_x = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.mouse_button_pressed = True
+
+        # Get the mouse location.
+        self.mouse_x, self.mouse_y = pygame.mouse.get_pos()

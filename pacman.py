@@ -321,12 +321,10 @@ class Player(GameObject):
                             self.leaving_portal = True
                             self.in_portal = False
 
-                            cur_portal = None
+                            cur_portal = self.portal_entrance_1
 
                             if self.portal_index == 0:
                                 cur_portal = self.portal_entrance_2
-                            else:
-                                cur_portal = self.portal_entrance_1
 
                             self.run_direction = cur_portal.direction
 
@@ -491,8 +489,8 @@ class Player(GameObject):
                     if self.is_running:
                         if self.cur_anim_frame_run >= self.max_anim_frame_run:
                             self.cur_anim_frame_run = 0
-
-                        self.cur_anim_frame_run += 1
+                        else:
+                            self.cur_anim_frame_run += 1
 
                         if self.cur_anim_frame_run == 0 or self.cur_anim_frame_run == 4:
                             self.image = self.image_runr1
@@ -584,6 +582,3 @@ class Player(GameObject):
                         self.image = self.image_die15
                     elif self.cur_anim_death == 90:
                         self.image = self.image_die16
-        else:
-            if self.cur_ready1_anim >= self.max_ready1_anim:
-                self.cur_ready1_anim = 0

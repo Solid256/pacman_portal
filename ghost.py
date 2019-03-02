@@ -379,12 +379,10 @@ class Ghost(GameObject):
                         self.leaving_portal = True
                         self.in_portal = False
 
-                        cur_portal = None
+                        cur_portal = self.portal_entrance_1
 
                         if self.portal_index == 0:
                             cur_portal = self.portal_entrance_2
-                        else:
-                            cur_portal = self.portal_entrance_1
 
                         self.run_direction = cur_portal.direction
 
