@@ -241,6 +241,9 @@ class GameSystem:
         text_4 = TextBox(232, 550, False, "THE Z AND X KEYS TO FIRE PORTALS.", font3, (0, 255, 255))
         self.game_objs_text_boxes["directions2"] = text_4
 
+        text_5 = TextBox(232, 570, False, "TAP ARROW KEYS TO ENTER PORTALS.", font3, (0, 255, 255))
+        self.game_objs_text_boxes["directions3"] = text_5
+
         o_title = GameObject(152, 130)
         o_title.image = self.sprite_images["portal_entrance_2_4.png"]
         o_title.image_rect = pygame.Rect(152, 130, 128, 128)

@@ -423,7 +423,7 @@ class Ghost(GameObject):
                     if self.ghost_type == 0:
                         if self.pacman.dots_eaten >= 100:
                             self.current_speed += 0.1
-                            if self.pacman.dots_eaten >= 150:
+                            if self.pacman.dots_eaten >= 200:
                                 self.current_speed += 0.1
 
                 if self.run_direction == 0:
