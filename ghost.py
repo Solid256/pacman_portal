@@ -6,7 +6,7 @@ import random
 
 class Ghost(GameObject):
     def __init__(self, x, y, ghost_type, max_time_scatter, pacman, a_star_array, a_star_list, walls,
-                 ghost_house_entrance, blinky, sprites):
+                 ghost_house_entrance, blinky, sound_manager, sprites):
         super(Ghost, self).__init__(x, y)
         self.ghost_type = ghost_type
         self.pacman = pacman
@@ -17,6 +17,7 @@ class Ghost(GameObject):
         self.portal_entrance_1 = None
         self.portal_entrance_2 = None
         self.blinky = blinky
+        self.sound_manager = sound_manager
         self.sprites = sprites
         self.is_vulnerable = False
         self.is_blinking = False
@@ -223,9 +224,43 @@ class Ghost(GameObject):
         self.cur_anim_portal = 0
         self.max_anim_portal = 6
         self.portal_index = 0
+        # Checks if blinky is playing a song.
+        # 0 - No song.
+        # 1 - Blinky 1.
+        # 2 - Blinky 2.
+        # 3 - Blinky 3.
+        # 4 - Flee.
+        # 5 - Revive.
+        self.blinky_play_sound = 0
+
+        # Checks if there are ghosts reviving.
+        self.ghosts_reviving = False
 
     def update_obj(self):
         if self.active:
+            # Check whether or not to start playing music.
+            if not self.pacman.ate_pellet and not self.ghosts_reviving:
+                if self.pacman.dots_eaten < 100:
+                    if not self.blinky_play_sound == 1:
+                        self.blinky_play_sound = 1
+                        self.sound_manager.play_sound(self.sound_manager.song_blinky_1, 0, -1)
+                elif 200 > self.pacman.dots_eaten >= 100:
+                    if not self.blinky_play_sound == 2:
+                        self.blinky_play_sound = 2
+                        self.sound_manager.play_sound(self.sound_manager.song_blinky_2, 0, -1)
+                elif self.pacman.dots_eaten >= 200:
+                    if not self.blinky_play_sound == 3:
+                        self.blinky_play_sound = 3
+                        self.sound_manager.play_sound(self.sound_manager.song_blinky_3, 0, -1)
+            elif not self.ghosts_reviving:
+                if not self.blinky_play_sound == 4:
+                    self.blinky_play_sound = 4
+                    self.sound_manager.play_sound(self.sound_manager.song_flee, 0, -1)
+            else:
+                if not self.blinky_play_sound == 5:
+                    self.blinky_play_sound = 5
+                    self.sound_manager.play_sound(self.sound_manager.song_revive, 0, -1)
+
             self.extra_movement = 0.0
 
             # Check if switching to a different mode.
@@ -397,6 +432,8 @@ class Ghost(GameObject):
 
                         self.position_x = cur_portal.position_x
                         self.position_y = cur_portal.position_y
+
+                        self.sound_manager.play_sound(self.sound_manager.sound5_enter_portal, 5, 0)
                     else:
                         self.cur_anim_portal += 1
 

@@ -5,9 +5,10 @@ from game_object import GameObject
 
 class Player(GameObject):
     def __init__(self, x, y, dots_eaten, input_manager, game_objs_tiles, game_objs_dots, game_objs_pellets,
-                 game_obj_fruit, game_objs_ghosts, game_objs_text_boxes, sprites):
+                 game_obj_fruit, game_objs_ghosts, game_objs_text_boxes, sound_manager, sprites):
         super(Player, self).__init__(x, y)
         self.sprites = sprites
+        self.sound_manager = sound_manager
         self.input_manager = input_manager
         self.game_objs_tiles = game_objs_tiles
         self.game_objs_dots = game_objs_dots
@@ -63,6 +64,8 @@ class Player(GameObject):
 
         # Checks if Pacman is dead or not.
         self.is_dead = False
+
+        self.ate_dot_1 = False
 
         # The running direction of Pacman.
         # 0 - left.
@@ -343,6 +346,8 @@ class Player(GameObject):
 
                             self.position_x = cur_portal.position_x
                             self.position_y = cur_portal.position_y
+
+                            self.sound_manager.play_sound(self.sound_manager.sound5_enter_portal, 5, 0)
                         else:
                             self.cur_anim_portal += 1
 

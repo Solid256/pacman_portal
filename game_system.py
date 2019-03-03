@@ -16,6 +16,7 @@ from portal_shot import PortalShot
 from portal_entrance import PortalEntrance
 from game_object import GameObject
 from button import Button
+from sound_manager import SoundManager
 
 
 class GameSystem:
@@ -49,6 +50,7 @@ class GameSystem:
         self.a_star_list = []
         self.sprite_images = {}
         self.input_manager = InputManager(self)
+        self.sound_manager = SoundManager()
         self.pygame_clock = None
         self.backbuffer = None
         self.game_obj_player = None
@@ -132,13 +134,16 @@ class GameSystem:
 
         in_file.close()
 
-        # Begin the game.
+        # Set up the sound manager and load the sounds.
+        self.sound_manager.init()
+        self.sound_manager.load_sounds()
+
         self.setup_pygame()
         self.load_sprite_images()
 
+        # Begin the game.
         self.setup_menu()
 
-        # self.load_map(True)
         self.main_loop()
 
     def setup_pygame(self):
@@ -311,6 +316,8 @@ class GameSystem:
         cur_rect2 = pygame.Rect(0, 0, 32, 32)
         self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_rect2))
 
+        self.sound_manager.play_sound(self.sound_manager.song_ready, 0, 0)
+
         self.load_map(True)
 
     def setup_high_score_table(self):
@@ -360,12 +367,15 @@ class GameSystem:
                     if button_pressed:
                         if button.type == 0:
                             self.game_mode = 1
+                            self.sound_manager.play_sound(self.sound_manager.sound1_pacdot_2, 1, 0)
                             self.setup_game()
                         elif button.type == 1:
                             self.game_mode = 3
+                            self.sound_manager.play_sound(self.sound_manager.sound1_pacdot_2, 1, 0)
                             self.setup_high_score_table()
                         elif button.type == 2:
                             self.game_mode = 0
+                            self.sound_manager.play_sound(self.sound_manager.sound1_pacdot_2, 1, 0)
                             self.setup_menu()
 
             # Animate the title screen.
@@ -693,10 +703,31 @@ class GameSystem:
                             self.inky_title_animation.image = self.sprite_images["inky_run_r2.png"]
                             self.clyde_title_animation.image = self.sprite_images["clyde_run_r2.png"]
 
+            # Check every frame if there are ghosts that are reviving. If so, tell blinky to play the ghost revive
+            # music.
+            found_ghosts_reviving = False
+
+            for ghost in self.game_objs_ghosts:
+                if ghost.run_mode == 4:
+                    for ghost2 in self.game_objs_ghosts:
+                        if ghost2.ghost_type == 0:
+                            ghost2.ghosts_reviving = True
+                            found_ghosts_reviving = True
+                            break
+                if found_ghosts_reviving:
+                    break
+
+            if not found_ghosts_reviving:
+                for ghost in self.game_objs_ghosts:
+                    if ghost.ghost_type == 0:
+                        ghost.ghosts_reviving = False
+
             # Check if changing the level or state.
             if self.game_obj_player is not None:
                 if self.game_obj_player.lose_life:
                     self.lives -= 1
+                    self.dots_eaten = self.game_obj_player.dots_eaten
+
                     if not len(self.lives_display) == 0:
                         self.lives_display.pop(0)
                     if self.lives > 0:
@@ -714,6 +745,7 @@ class GameSystem:
                         self.game_obj_player = None
                         self.add_new_high_score(self.current_score)
                         self.export_new_high_scores()
+                        self.dots_eaten = 0
 
                 elif self.game_obj_player.finished_map_finished_anim:
                     self.cur_level += 1
@@ -759,6 +791,7 @@ class GameSystem:
                     cur_image_rect = pygame.Rect(0, 0, 32, 32)
                     self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_image_rect))
                     self.got_extra_life = True
+                    self.sound_manager.play_sound(self.sound_manager.sound7_extra_life, 7, 0)
 
             # Update the game objects.
 
@@ -774,6 +807,7 @@ class GameSystem:
                                                     self.sprite_images["portal_shot_1.png"],
                                                     self.game_obj_player.run_direction)
                     self.game_obj_player.portal_shot_1 = self.portal_shot_1
+                    self.sound_manager.play_sound(self.sound_manager.sound4_fire_portal, 4, 0)
 
                 elif self.input_manager.pressed_x and self.portal_shot_2 is None:
                     self.portal_shot_2 = PortalShot(int(self.game_obj_player.position_x),
@@ -781,6 +815,7 @@ class GameSystem:
                                                     self.sprite_images["portal_shot_2.png"],
                                                     self.game_obj_player.run_direction)
                     self.game_obj_player.portal_shot_2 = self.portal_shot_2
+                    self.sound_manager.play_sound(self.sound_manager.sound4_fire_portal, 4, 0)
 
             # Update the portal shots.
             if self.portal_shot_1 is not None:
@@ -1172,7 +1207,9 @@ class GameSystem:
         self.game_obj_player = Player(224, 424, self.dots_eaten, self.input_manager, self.game_objs_tiles,
                                       self.game_objs_dots, self.game_objs_pellets, self.game_obj_fruit,
                                       self.game_objs_ghosts,
-                                      self.game_objs_text_boxes, self.sprite_images)
+                                      self.game_objs_text_boxes, self.sound_manager, self.sprite_images)
+
+        self.game_obj_player.dots_eaten = self.dots_eaten
 
         if self.cur_level < 9:
             self.game_obj_player.max_anim_ate_pellet -= 64 * self.cur_level
@@ -1187,22 +1224,22 @@ class GameSystem:
         # Create Blinky.
         blinky = Ghost(224, 232, 0, self.ghost_cur_time_scatter, self.game_obj_player, self.a_star_array,
                        self.a_star_list, self.game_objs_tiles, self.game_obj_ghost_house_entrance, None,
-                      self.sprite_images)
+                       self.sound_manager, self.sprite_images)
 
         # Create Pinky.
         pinky = Ghost(224, 280, 1, self.ghost_cur_time_scatter, self.game_obj_player, self.a_star_array,
                       self.a_star_list, self.game_objs_tiles, self.game_obj_ghost_house_entrance, None,
-                      self.sprite_images)
+                      self.sound_manager, self.sprite_images)
 
         # Create Inky.
         inky = Ghost(192, 280, 2, self.ghost_cur_time_scatter, self.game_obj_player, self.a_star_array,
                      self.a_star_list, self.game_objs_tiles, self.game_obj_ghost_house_entrance, blinky,
-                     self.sprite_images)
+                     self.sound_manager, self.sprite_images)
 
         # Create Clyde.
         clyde = Ghost(256, 280, 3, self.ghost_cur_time_scatter, self.game_obj_player, self.a_star_array,
                       self.a_star_list, self.game_objs_tiles, self.game_obj_ghost_house_entrance, None,
-                      self.sprite_images)
+                      self.sound_manager, self.sprite_images)
 
         self.game_objs_ghosts.append(blinky)
         self.game_objs_ghosts.append(pinky)
@@ -1280,9 +1317,20 @@ class GameSystem:
                 if collision_rect_other is not None and \
                         self.game_obj_player.collision_rect.colliderect(collision_rect_other):
                     self.game_objs_dots.remove(cur_game_obj)
+
+                    # If all of the dots are eaten, stop the music.
+                    if len(self.game_objs_dots) == 0:
+                        self.sound_manager.channel_song.stop()
+
                     self.game_obj_player.dots_eaten += 1
                     self.dots_eaten += 1
                     self.current_score += 10
+                    if not self.game_obj_player.ate_dot_1:
+                        self.sound_manager.play_sound(self.sound_manager.sound1_pacdot_1, 1, 0)
+                        self.game_obj_player.ate_dot_1 = True
+                    else:
+                        self.sound_manager.play_sound(self.sound_manager.sound1_pacdot_2, 2, 0)
+                        self.game_obj_player.ate_dot_1 = False
 
         # Check for collisions between the player and the pellets.
         if self.game_obj_player is not None:
@@ -1339,6 +1387,8 @@ class GameSystem:
                             self.game_obj_player.just_ate_ghost = True
                             self.game_obj_player.image = None
 
+                            self.sound_manager.play_sound(self.sound_manager.sound3_eat_ghost, 3, 0)
+
                             # We only want to collide with one ghost.
                             break
 
@@ -1351,7 +1401,11 @@ class GameSystem:
                             self.game_obj_fruit = None
                             self.portal_shot_1 = None
                             self.portal_shot_2 = None
+
+                            self.sound_manager.channel_song.stop()
                             pygame.time.wait(1200)
+
+                            self.sound_manager.play_sound(self.sound_manager.song_pacman_die, 0, 0)
 
         # Check for collisions between the player and the fruit.
         if self.game_obj_player is not None:
@@ -1361,8 +1415,10 @@ class GameSystem:
                 if collision_rect_other is not None and \
                         self.game_obj_player.collision_rect.colliderect(collision_rect_other):
                     if self.game_obj_fruit.despawning:
-                        self.game_obj_fruit.eaten = True
-                        self.current_score += self.game_obj_fruit.score
+                        if not self.game_obj_fruit.eaten:
+                            self.sound_manager.play_sound(self.sound_manager.sound2_fruit, 2, 0)
+                            self.game_obj_fruit.eaten = True
+                            self.current_score += self.game_obj_fruit.score
 
         # Check for collisions between the ghosts and the ghost house entrance.
         for ghost in self.game_objs_ghosts:
@@ -1417,6 +1473,7 @@ class GameSystem:
                         self.game_obj_player.portal_entrance_1 = self.portal_entrance_1
                         for ghost in self.game_objs_ghosts:
                             ghost.portal_entrance_1 = self.portal_entrance_1
+                        self.sound_manager.play_sound(self.sound_manager.sound6_generate_portal, 6, 0)
                     self.portal_shot_1 = None
                     portal_created = True
 
@@ -1433,6 +1490,7 @@ class GameSystem:
                         self.game_obj_player.portal_entrance_2 = self.portal_entrance_2
                         for ghost in self.game_objs_ghosts:
                             ghost.portal_entrance_2 = self.portal_entrance_2
+                        self.sound_manager.play_sound(self.sound_manager.sound6_generate_portal, 6, 0)
                     self.portal_shot_2 = None
 
         # Check for collisions between the portal shot and the ghosts.
