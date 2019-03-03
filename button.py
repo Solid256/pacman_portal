@@ -2,10 +2,10 @@ from game_object import GameObject
 
 
 class Button(GameObject):
-    def __init__(self, x, y, type, text, text_color, highlight_color, font, input_manager):
+    def __init__(self, x, y, button_type, text, text_color, highlight_color, font, input_manager):
         super(Button, self).__init__(x, y)
 
-        self.type = type
+        self.button_type = button_type
         self.text = text
         self.text_color = text_color
         self.highlight_color = highlight_color

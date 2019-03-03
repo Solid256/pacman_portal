@@ -1621,39 +1621,6 @@ class GameSystem:
         # Render the buttons.
         self.render_game_obj_group(self.game_objs_buttons, False)
 
-        # Debug rendering for the ghost's a star path.
-
-        # Debug rendering for the ghost house.
-        '''if self.game_obj_ghost_house_entrance is not None:
-            cur_image = self.sprite_images["debug_2.png"]
-            cur_rect = cur_image.get_rect()
-            cur_rect.centerx = self.game_obj_ghost_house_entrance.position_x
-            cur_rect.centery = self.game_obj_ghost_house_entrance.position_y
-            self.backbuffer.blit(cur_image, cur_rect)'''
-
-        # Render the ghost's path.
-        for ghost in self.game_objs_ghosts:
-            '''for node in ghost.node_path:
-                cur_image = self.sprite_images["debug_1.png"]
-                cur_rect = cur_image.get_rect()
-                cur_rect.centerx = node.position_x
-                cur_rect.centery = node.position_y
-                self.backbuffer.blit(cur_image, cur_rect)'''
-
-            # Render the ghost's start index.
-            '''cur_image = self.sprite_images["debug_1.png"]
-            cur_rect = cur_image.get_rect()
-            cur_rect.centerx = ghost.a_star_ghost_index_x * 16 + 8
-            cur_rect.centery = ghost.a_star_ghost_index_y * 16 + 8
-            self.backbuffer.blit(cur_image, cur_rect)
-
-            # Render the ghost's end index.
-            cur_image = self.sprite_images["debug_2.png"]
-            cur_rect = cur_image.get_rect()
-            cur_rect.centerx = ghost.a_star_end_index_x * 16 + 8
-            cur_rect.centery = ghost.a_star_end_index_y * 16 + 8
-            self.backbuffer.blit(cur_image, cur_rect)'''
-
         # Swap the backbuffer.
         pygame.display.flip()
 
