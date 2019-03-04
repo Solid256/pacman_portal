@@ -5,6 +5,7 @@ import pygame
 
 class GhostHouseEntrance(GameObject):
     def __init__(self, x, y, sprites):
+        """The init function for initializing the default values."""
         super(GhostHouseEntrance, self).__init__(x, y)
 
         self.sprites = sprites

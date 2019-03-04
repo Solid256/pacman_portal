@@ -6,6 +6,7 @@ from game_object import GameObject
 class Player(GameObject):
     def __init__(self, x, y, dots_eaten, input_manager, game_objs_tiles, game_objs_dots, game_objs_pellets,
                  game_obj_fruit, game_objs_ghosts, game_objs_text_boxes, sound_manager, sprites):
+        """The init function for initializing the default values."""
         super(Player, self).__init__(x, y)
         self.sprites = sprites
         self.sound_manager = sound_manager

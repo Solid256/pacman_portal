@@ -7,31 +7,43 @@ import random
 class Ghost(GameObject):
     def __init__(self, x, y, ghost_type, max_time_scatter, pacman, a_star_array, a_star_list, walls,
                  ghost_house_entrance, blinky, sound_manager, sprites):
+        """The init function for initializing the default values."""
         super(Ghost, self).__init__(x, y)
-        self.ghost_type = ghost_type
-        self.pacman = pacman
-        self.a_star_array = a_star_array
-        self.a_star_list = a_star_list
-        self.walls = walls
-        self.ghost_house_entrance = ghost_house_entrance
-        self.portal_entrance_1 = None
-        self.portal_entrance_2 = None
-        self.blinky = blinky
-        self.sound_manager = sound_manager
-        self.sprites = sprites
         self.is_vulnerable = False
         self.is_blinking = False
         self.blink_anim_toggle = True
+        self.can_travel_through_portals = False
+
+        # Checks if the ghost is running or not.
+        self.is_running = True
+
+        self.end_node_reached = False
+
+        self.teleporting = False
+
+        # Checks if the ghost has switched run mode. It is only reset to false after the ghost has gotten a chance to
+        # change direction and gather a new previous corner node.
+        self.switched_mode = False
+
+        # Checks if the ghost is dead.
+        self.dead = False
+
+        self.clyde_switch_mode_1 = False
+
+        self.active = False
+
+        self.in_portal = False
+        self.leaving_portal = False
+
+        # Checks if there are ghosts reviving.
+        self.ghosts_reviving = False
+
+        self.ghost_type = ghost_type
         self.max_mode_switch_0 = 400
         self.max_mode_switch_1 = max_time_scatter
         self.cur_mode_switch = 0
         self.extra_movement = 0
-        self.prev_turn_node = None
         self.clyde_wait = 0
-        self.can_travel_through_portals = False
-
-        # Set up the random seed.
-        random.seed()
 
         # The direction that the ghost is running.
         # 0 - left.
@@ -56,6 +68,89 @@ class Ghost(GameObject):
         # 4 - Moving down.
         self.spawn_mode = 0
 
+        # The running speed of the ghost.
+        self.run_speed = 1.8
+
+        # The traveling speed of the ghost.
+        self.traveling_speed = 1.5
+
+        # The vulnerable speed of the ghost.
+        self.vulnerable_speed = 1.0
+
+        # The revive speed of the ghost.
+        self.revive_speed = 3.0
+
+        # The current speed being used.
+        self.current_speed = self.run_speed
+
+        # The current run mode being managed by the random timer.
+        self.timed_run_mode = 1
+
+        # The previous run mode. Used to check if the run mode has changed.
+        self.prev_run_mode = 1
+
+        # The current scatter position for the scatter and flee modes.
+        self.scatter_index_x = 0
+        self.scatter_index_y = 0
+
+        # The scatter positions for the scatter and flee modes.
+        self.scatter_tl_index_x = self.compute_index(24)
+        self.scatter_tl_index_y = self.compute_index(40)
+
+        self.scatter_tr_index_x = self.compute_index(424)
+        self.scatter_tr_index_y = self.compute_index(40)
+
+        self.scatter_dl_index_x = self.compute_index(24)
+        self.scatter_dl_index_y = self.compute_index(552)
+
+        self.scatter_dr_index_x = self.compute_index(424)
+        self.scatter_dr_index_y = self.compute_index(552)
+
+        # The current animation for the running animation.
+        self.cur_anim_run = 0
+
+        # The maximum animation for the running animation.
+        self.max_anim_run = 16
+
+        # The start point a star indices for the ghosts.
+        self.a_star_ghost_index_x = 0
+        self.a_star_ghost_index_y = 0
+
+        # The end point a star indices for the ghosts.
+        self.a_star_end_index_x = 0
+        self.a_star_end_index_y = 0
+
+        # The maximum number of nodes found. This is to prevent the a star algorithm from becoming too slow.
+        self.max_num_of_nodes_found = 256
+
+        self.cur_anim_portal = 0
+        self.max_anim_portal = 6
+        self.portal_index = 0
+        # Checks if blinky is playing a song.
+        # 0 - No song.
+        # 1 - Blinky 1.
+        # 2 - Blinky 2.
+        # 3 - Blinky 3.
+        # 4 - Flee.
+        # 5 - Revive.
+        self.blinky_play_sound = 0
+
+        self.pacman = pacman
+        self.a_star_array = a_star_array
+        self.a_star_list = a_star_list
+        self.walls = walls
+        self.ghost_house_entrance = ghost_house_entrance
+        self.portal_entrance_1 = None
+        self.portal_entrance_2 = None
+        self.blinky = blinky
+        self.sound_manager = sound_manager
+        self.sprites = sprites
+        self.prev_turn_node = None
+
+        # Set up the random seed.
+        random.seed()
+
+        # Choose the correct ghost images based on the ghost type.
         if self.ghost_type == 0:
             self.image_run_l1 = sprites["blinky_run_l1.png"]
             self.image_run_l2 = sprites["blinky_run_l2.png"]
@@ -140,101 +235,11 @@ class Ghost(GameObject):
         # The collision rect.
         self.collision_rect = pygame.Rect(x - 8, y - 8, 16, 16)
 
-        # The running speed of the ghost.
-        self.run_speed = 1.8
-
-        # The traveling speed of the ghost.
-        self.traveling_speed = 1.5
-
-        # The vulnerable speed of the ghost.
-        self.vulnerable_speed = 1.0
-
-        # The revive speed of the ghost.
-        self.revive_speed = 3.0
-
-        # The current speed being used.
-        self.current_speed = self.run_speed
-
-        # Checks if the ghost is running or not.
-        self.is_running = True
-
-        # The current run mode being managed by the random timer.
-        self.timed_run_mode = 1
-
-        # The previous run mode. Used to check if the run mode has changed.
-        self.prev_run_mode = 1
-
-        # The current scatter position for the scatter and flee modes.
-        self.scatter_index_x = 0
-        self.scatter_index_y = 0
-
-        # The scatter positions for the scatter and flee modes.
-        self.scatter_tl_index_x = self.compute_index(24)
-        self.scatter_tl_index_y = self.compute_index(40)
-
-        self.scatter_tr_index_x = self.compute_index(424)
-        self.scatter_tr_index_y = self.compute_index(40)
-
-        self.scatter_dl_index_x = self.compute_index(24)
-        self.scatter_dl_index_y = self.compute_index(552)
-
-        self.scatter_dr_index_x = self.compute_index(424)
-        self.scatter_dr_index_y = self.compute_index(552)
-
-        # The current animation for the running animation.
-        self.cur_anim_run = 0
-
-        # The maximum animation for the running animation.
-        self.max_anim_run = 16
-
-        # The start point a star indices for the ghosts.
-        self.a_star_ghost_index_x = 0
-        self.a_star_ghost_index_y = 0
-
-        # The end point a star indices for the ghosts.
-        self.a_star_end_index_x = 0
-        self.a_star_end_index_y = 0
-
-        # The maximum number of nodes found. This is to prevent the a star algorithm from becoming too slow.
-        self.max_num_of_nodes_found = 256
-
         # The node path for the ghost to travel on.
         self.node_path = []
 
         # The predecessors of the child nodes.
         self.predecessors = {}
-
-        self.end_node_reached = False
-
-        self.teleporting = False
-
-        # Checks if the ghost has switched run mode. It is only reset to false after the ghost has gotten a chance to
-        # change direction and gather a new previous corner node.
-        self.switched_mode = False
-
-        # Checks if the ghost is dead.
-        self.dead = False
-
-        self.clyde_switch_mode_1 = False
-
-        self.active = False
-
-        self.in_portal = False
-        self.leaving_portal = False
-        self.cur_anim_portal = 0
-        self.max_anim_portal = 6
-        self.portal_index = 0
-        # Checks if blinky is playing a song.
-        # 0 - No song.
-        # 1 - Blinky 1.
-        # 2 - Blinky 2.
-        # 3 - Blinky 3.
-        # 4 - Flee.
-        # 5 - Revive.
-        self.blinky_play_sound = 0
-
-        # Checks if there are ghosts reviving.
-        self.ghosts_reviving = False
 
     def update_obj(self):
         if self.active:
@@ -352,10 +357,16 @@ class Ghost(GameObject):
                             # Check for the existence of a portal. If one exists, go right ahead and decide to either go
                             # through the portal or follow the a star algorithm.
                             # Check if Pac-Man is entering a portal. If so make the player start traveling.
-                            if self.can_travel_through_portals and self.portal_entrance_1 is not None and \
+                            if self.can_travel_through_portals and \
+                                    not self.run_mode == 2 and \
+                                    not self.run_mode == 3 and \
+                                    not self.run_mode == 4 and \
+                                    self.portal_entrance_1 is not None and \
                                     self.portal_entrance_2 is not None and \
-                                    not self.run_mode == 2 and not self.in_portal and not self.leaving_portal and \
-                                    not self.portal_entrance_1.in_use and not self.portal_entrance_2.in_use:
+                                    not self.in_portal and \
+                                    not self.leaving_portal and \
+                                    not self.portal_entrance_1.in_use and \
+                                    not self.portal_entrance_2.in_use:
 
                                 # The chance that the ghost will go through the portal.
                                 chance_portal = random.randint(0, 3)

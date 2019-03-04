@@ -3,6 +3,7 @@ import pygame
 
 class InputManager:
     def __init__(self, game_system):
+        """The init function for initializing the default values."""
         self.pressed_up = False
         self.pressed_down = False
         self.pressed_left = False

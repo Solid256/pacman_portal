@@ -4,6 +4,7 @@ import pygame
 
 class PortalShot(GameObject):
     def __init__(self, x, y, portal_type, image1, direction):
+        """The init function for initializing the default values."""
         super(PortalShot, self).__init__(x, y)
 
         self.portal_type = portal_type

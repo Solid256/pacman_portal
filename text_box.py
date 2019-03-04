@@ -3,6 +3,7 @@ from game_object import GameObject
 
 class TextBox(GameObject):
     def __init__(self, x, y, align_bottom_left, text, font, color):
+        """The init function for initializing the default values."""
         super(TextBox, self).__init__(x, y)
 
         self.align_bottom_left = align_bottom_left

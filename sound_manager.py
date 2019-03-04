@@ -3,6 +3,7 @@ import pygame
 
 class SoundManager:
     def __init__(self):
+        """The init function for initializing the default values."""
         self.song_ready = None
         self.song_blinky_1 = None
         self.song_blinky_2 = None

@@ -5,6 +5,7 @@ from game_object import GameObject
 
 class Pellet(GameObject):
     def __init__(self, x, y, image):
+        """The init function for initializing the default values."""
         super(Pellet, self).__init__(x, y)
 
         self.image = image

@@ -21,55 +21,19 @@ from sound_manager import SoundManager
 
 class GameSystem:
     def __init__(self):
-        self.game_objs_tiles = []
-        self.game_objs_dots = []
-        self.game_objs_pellets = []
-        self.game_objs_ghosts = []
-        self.game_objs_text_boxes = {}
-        self.fonts = {}
-        self.fruit_display = {}
-        self.lives_display = []
-        self.game_objs_title_images = []
-        self.game_objs_buttons = []
+        """The init function for initializing the default values."""
+
+        # Checks if the game is runnning.
+        self.is_running = True
+
+        # Checks if the player got an extra life.
+        self.got_extra_life = False
 
         # The columns in the a star array.
         self.a_star_array_rows = 29
 
         # The rows in the a star array.
         self.a_star_array_columns = 35
-
-        # The a star array of arrays.
-        self.a_star_array = []
-        for x in range(0, self.a_star_array_rows):
-            self.a_star_array.append([])
-            for y in range(0, self.a_star_array_columns):
-                self.a_star_array[x].append(None)
-
-        # The list of nodes in the a star graph, extracted from the a star array. It also contain a tuple with the x
-        # and y coordinate.
-        self.a_star_list = []
-        self.sprite_images = {}
-        self.input_manager = InputManager(self)
-        self.sound_manager = SoundManager()
-        self.pygame_clock = None
-        self.backbuffer = None
-        self.game_obj_player = None
-        self.game_obj_fruit = None
-        self.game_obj_ghost_house_entrance = None
-        self.portal_shot_1 = None
-        self.portal_shot_2 = None
-        self.portal_entrance_1 = None
-        self.portal_entrance_2 = None
-        self.pacman_title_animation = None
-        self.blinky_title_animation = None
-        self.pinky_title_animation = None
-        self.inky_title_animation = None
-        self.clyde_title_animation = None
-        self.power_pellet_title_animation = None
-        self.blinky_name = None
-        self.pinky_name = None
-        self.inky_name = None
-        self.clyde_name = None
 
         # The current game mode.
         # 0 - Title Screen.
@@ -93,10 +57,17 @@ class GameSystem:
         # 12 - inky leave.
         # 13 - clyde leave.
         self.title_anim_mode = 0
-        self.is_running = True
+
+        # The number of lives to start with.
         self.lives = 3
+
+        # The ghost max time scatter.
         self.ghost_max_time_scatter = 400
+
+        # The ghost current time scatter.
         self.ghost_cur_time_scatter = self.ghost_max_time_scatter
+
+        # The current level that Pac-Man is on.
         self.cur_level = 0
 
         # The number of dots Pacman has eaten.
@@ -105,45 +76,189 @@ class GameSystem:
         # The current score from the current playthrough.
         self.current_score = 0
 
-        # Checks if the player got an extra life.
-        self.got_extra_life = False
-
         # The score needed to get an extra life. It is 10,000, just like in the original Pacman.
         self.extra_life_score = 10000
 
+        # The current anim for the title part 1.
         self.cur_anim_title_1 = 0
+
+        # The max anim for the title part 1.
         self.max_anim_title_1 = 172
+
+        # The current anim for the title pacman and ghost animations.
         self.cur_anim_title_pacman = 0
+
+        # The max anim for the title pacman and ghost animations.
         self.max_anim_title_pacman = 6
+
+        # The current anim for the title part 2.
         self.cur_anim_title_2 = 0
+
+        # The max anim for the title part 2.
         self.max_anim_title_2 = 250
+
+        # The current anim for the title part 3.
         self.cur_anim_title_3 = 0
+
+        # The max anim for the title part 3.
         self.max_anim_title_3 = 63
+
+        # The current anim for the title part 4.
         self.cur_anim_title_4 = 0
+
+        # The max anim for the title part 4.
         self.max_anim_title_4 = 20
+
+        # The current anim for the title part 5.
         self.cur_anim_title_5 = 0
+
+        # The max anim for the title part 5.
         self.max_anim_title_5 = 125
 
+        # The input manager for detecting keyboard and mouse input.
+        self.input_manager = InputManager(self)
+
+        # The sound manager for playing the music and sound effects.
+        self.sound_manager = SoundManager()
+
+        # The pygame clock for managing the time.
+        self.pygame_clock = None
+
+        # The backbuffer being rendered to.
+        self.backbuffer = None
+
+        # The player game object. AKA Pac-Man.
+        self.game_obj_player = None
+
+        # The fruit game object.
+        self.game_obj_fruit = None
+
+        # The ghost house entrance game object.
+        self.game_obj_ghost_house_entrance = None
+
+        # The portal shot 1.
+        self.portal_shot_1 = None
+
+        # The portal shot 2.
+        self.portal_shot_2 = None
+
+        # The portal entrance 1.
+        self.portal_entrance_1 = None
+
+        # The portal entrance 2.
+        self.portal_entrance_2 = None
+
+        # The Pac-Man title animation.
+        self.pacman_title_animation = None
+
+        # The blinky title animation.
+        self.blinky_title_animation = None
+
+        # The pinky title animation.
+        self.pinky_title_animation = None
+
+        # The inky title animation.
+        self.inky_title_animation = None
+
+        # The clyde title animation.
+        self.clyde_title_animation = None
+
+        # The power pellet title animation.
+        self.power_pellet_title_animation = None
+
+        # The name for blinky for the title animation.
+        self.blinky_name = None
+
+        # The name for pinky for the title animation.
+        self.pinky_name = None
+
+        # The name for inky for the title animation.
+        self.inky_name = None
+
+        # The name for clyde for the title animation.
+        self.clyde_name = None
+
+        # The game object tiles. AKA walls.
+        self.game_objs_tiles = []
+
+        # The game object dots.
+        self.game_objs_dots = []
+
+        # The game object pellets.
+        self.game_objs_pellets = []
+
+        # The game object ghosts.
+        self.game_objs_ghosts = []
+
+        # The game object text boxes.
+        self.game_objs_text_boxes = {}
+
+        # The fonts for rendering the text.
+        self.fonts = {}
+
+        # The fruit display for displaying the fruit below the map.
+        self.fruit_display = {}
+
+        # The lives display for displaying the lives above the map.
+        self.lives_display = []
+
+        # The game object title images.
+        self.game_objs_title_images = []
+
+        # The game object buttons.
+        self.game_objs_buttons = []
+
+        # The a star array of arrays.
+        self.a_star_array = []
+
+        # Create the star array.
+        for x in range(0, self.a_star_array_rows):
+            self.a_star_array.append([])
+            for y in range(0, self.a_star_array_columns):
+                self.a_star_array[x].append(None)
+
+        # The list of nodes in the a star graph, extracted from the a star array. It also contain a tuple with the x
+        # and y coordinate.
+        self.a_star_list = []
+
+        # The list of sprite images.
+        self.sprite_images = {}
+
+        # The list of high scores.
         self.high_scores = []
 
+        # Create the high scores.
+
+        # The high score file.
         in_file = open("high_scores.bin", "rb")
 
+        # Load all 20 of the high score.
         for x in range(0, 20):
+            # The current high score being loaded.
             cur_score = struct.unpack('i', in_file.read(4))[0]
+
+            # Add the high score to the high score list.
             self.high_scores.append(cur_score)
 
+        # Close the high score file.
         in_file.close()
 
         # Set up the sound manager and load the sounds.
         self.sound_manager.init()
         self.sound_manager.load_sounds()
 
+        # Set up pygame.
         self.setup_pygame()
+
+        # Load the sprite images.
         self.load_sprite_images()
 
         # Begin the game.
+
+        # Prep the game menu.
         self.setup_menu()
 
+        # Start the main loop.
         self.main_loop()
 
     def setup_pygame(self):
@@ -158,15 +273,20 @@ class GameSystem:
         self.backbuffer = pygame.display.set_mode(
             (448, 600))
 
+        # Set the caption for the game window.
         pygame.display.set_caption("Pacman")
 
         # Load the font files.
+
+        # The small font.
         font1 = pygame.font.Font("fonts/PressStart2P.ttf", 12)
         self.fonts["PressStart2P-small"] = font1
 
+        # The big font.
         font2 = pygame.font.Font("fonts/PressStart2P.ttf", 50)
         self.fonts["PressStart2P-big"] = font2
 
+        # The medium font.
         font3 = pygame.font.Font("fonts/PressStart2P.ttf", 32)
         self.fonts["PressStart2P-medium"] = font3
 
@@ -176,9 +296,13 @@ class GameSystem:
         # Load the sprite sheet image.
         sprite_sheet = pygame.image.load('images/sprites.png')
 
+        # The e tree node for the sprite images.
         e_tree = ETree.parse("images/sprites.xml")
+
+        # The root node of the e tree.
         root = e_tree.getroot()
 
+        # The sprite info xml objects.
         sprite_infos_xml = root.findall('sprite')
 
         # Create every individual sprite and load it into the sprite image list.
@@ -200,28 +324,46 @@ class GameSystem:
             # The height of the sprite.
             h = 0
 
+            # Load all of the sprite attributes for the current sprite.
             for sprite_attr in sprite_info_xml.attrib:
+
+                # Check for the different kinds of sprite attributes.
                 if sprite_attr == 'n':
+                    # The name of the sprite.
                     name = sprite_info_xml.get(sprite_attr)
                 elif sprite_attr == 'x':
+                    # The x position of the sprite.
                     x = int(sprite_info_xml.get(sprite_attr))
                 elif sprite_attr == 'y':
+                    # The y position of the sprite.
                     y = int(sprite_info_xml.get(sprite_attr))
                 elif sprite_attr == 'w':
+                    # The width of the sprite.
                     w = int(sprite_info_xml.get(sprite_attr))
                 elif sprite_attr == 'h':
+                    # The height of the sprite.
                     h = int(sprite_info_xml.get(sprite_attr))
 
+            # The current image of the sprite in the sprite sheet.
             cur_image = sprite_sheet.subsurface(
                 pygame.Rect(x, y, w, h))
 
+            # Add the sprite to the sprite image dictionary.
             self.sprite_images[name] = cur_image
 
     def setup_menu(self):
+        """Sets up the menu for the game."""
+
+        # Clear all the game object title images.
         self.game_objs_title_images.clear()
+
+        # Clear all the game object buttons.
         self.game_objs_buttons.clear()
+
+        # Clear all the game object text boxes.
         self.game_objs_text_boxes.clear()
 
+        # Set the defaults for the title animations.
         self.cur_anim_title_1 = 0
         self.cur_anim_title_pacman = 0
         self.cur_anim_title_2 = 0
@@ -230,68 +372,95 @@ class GameSystem:
         self.cur_anim_title_5 = 0
         self.title_anim_mode = 0
 
+        # The fonts for the text rendering.
         font1 = self.fonts["PressStart2P-big"]
         font2 = self.fonts["PressStart2P-medium"]
         font3 = self.fonts["PressStart2P-small"]
 
+        # The text box for the Pac-Man title.
         text_1 = TextBox(232, 80, False, "PAC-MAN", font1, (255, 255, 150))
         self.game_objs_text_boxes["title1"] = text_1
 
+        # The text box for the Pac-Man Portal title.
         text_2 = TextBox(232, 130, False, "PORTAL", font1, (255, 255, 150))
         self.game_objs_text_boxes["title2"] = text_2
 
+        # The text box for the directions part 1.
         text_3 = TextBox(232, 530, False, "USE THE ARROW KEYS TO MOVE AND", font3, (0, 255, 255))
         self.game_objs_text_boxes["directions1"] = text_3
 
+        # The text box for the directions part 2.
         text_4 = TextBox(232, 550, False, "THE Z AND X KEYS TO FIRE PORTALS.", font3, (0, 255, 255))
         self.game_objs_text_boxes["directions2"] = text_4
 
+        # The text box for the directions part 3.
         text_5 = TextBox(232, 570, False, "TAP ARROW KEYS TO ENTER PORTALS.", font3, (0, 255, 255))
         self.game_objs_text_boxes["directions3"] = text_5
 
+        # The title object portal image.
         o_title = GameObject(152, 130)
+
+        # The image for the portal image.
         o_title.image = self.sprite_images["portal_entrance_2_4.png"]
+
+        # The image rect for the portal image.
         o_title.image_rect = pygame.Rect(152, 130, 128, 128)
+
+        # Add the portal image to the game objects title images list.
         self.game_objs_title_images.append(o_title)
 
+        # The start button for starting the game.
         start_button = Button(232, 400, 0, "START GAME", (100, 100, 100), (200, 200, 200),
                               font2, self.input_manager)
+        # Add the start button to the list of buttons.
         self.game_objs_buttons.append(start_button)
 
+        # The high score button for the high scores.
         high_scores_button = Button(232, 460, 1, "HIGH SCORES", (100, 100, 100), (200, 200, 200),
                                     font2, self.input_manager)
+        # Add the high score button to the list of buttons.
         self.game_objs_buttons.append(high_scores_button)
 
         # Create the pacman characters for the title screen animation.
         pacman_t = GameObject(0, 260)
+
+        # The image for the pacman title image.
         pacman_t.image = self.sprite_images["pacman_run1.png"]
+
+        # The image rect for the pacman title image.
         pacman_t.image_rect = pygame.Rect(pacman_t.position_x, pacman_t.position_y, 32, 32)
 
+        # Create the blinky title animation image.
         blinky_t = GameObject(-40, 260)
         blinky_t.image = self.sprite_images["blinky_run_r1.png"]
         blinky_t.image_rect = pygame.Rect(pacman_t.position_x, pacman_t.position_y, 32, 32)
         self.game_objs_title_images.append(blinky_t)
 
+        # Create the pinky title animation image.
         pinky_t = GameObject(-80, 260)
         pinky_t.image = self.sprite_images["pinky_run_r1.png"]
         pinky_t.image_rect = pygame.Rect(pacman_t.position_x, pacman_t.position_y, 32, 32)
         self.game_objs_title_images.append(pinky_t)
 
+        # Create the inky title animation image.
         inky_t = GameObject(-120, 260)
         inky_t.image = self.sprite_images["inky_run_r1.png"]
         inky_t.image_rect = pygame.Rect(pacman_t.position_x, pacman_t.position_y, 32, 32)
         self.game_objs_title_images.append(inky_t)
 
+        # Create the clyde title animation image.
         clyde_t = GameObject(-160, 260)
         clyde_t.image = self.sprite_images["clyde_run_r1.png"]
         clyde_t.image_rect = pygame.Rect(pacman_t.position_x, pacman_t.position_y, 32, 32)
         self.game_objs_title_images.append(clyde_t)
 
+        # Create the power pellet title animation image.
         power_pellet_t = GameObject(360, 268)
         power_pellet_t.image = self.sprite_images["pellet.png"]
         power_pellet_t.image_rect = pygame.Rect(pacman_t.position_x, pacman_t.position_y, 32, 32)
         self.game_objs_title_images.append(power_pellet_t)
 
+        # Set all the references for the title images.
         self.pacman_title_animation = pacman_t
         self.blinky_title_animation = blinky_t
         self.pinky_title_animation = pinky_t
@@ -300,45 +469,63 @@ class GameSystem:
         self.power_pellet_title_animation = power_pellet_t
 
     def setup_game(self):
+        """Set up the game for gameplay."""
+
+        # Clear all the title screen objects.
         self.game_objs_title_images.clear()
         self.game_objs_buttons.clear()
         self.game_objs_text_boxes.clear()
 
+        # Reset the gameplay variables.
         self.ghost_cur_time_scatter = self.ghost_max_time_scatter
         self.cur_level = 0
         self.dots_eaten = 0
         self.current_score = 0
         self.got_extra_life = False
 
+        # Create the rect for the Pac-Man life display.
         cur_rect = pygame.Rect(0, 0, 32, 32)
         self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_rect))
 
+        # Create another rect for the Pac-Man life display.
         cur_rect2 = pygame.Rect(0, 0, 32, 32)
         self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_rect2))
 
+        # Play the ready song.
         self.sound_manager.play_sound(self.sound_manager.song_ready, 0, 0)
 
+        # Load the map.
         self.load_map(True)
 
     def setup_high_score_table(self):
+        """Sets up the high score table."""
+
+        # Remove the title game objects.
         self.game_objs_title_images.clear()
         self.game_objs_buttons.clear()
         self.game_objs_text_boxes.clear()
 
+        # The fonts for the text boxes and buttons.
         font2 = self.fonts["PressStart2P-medium"]
         font3 = self.fonts["PressStart2P-small"]
 
+        # The text box for the high scores.
         text_1 = TextBox(232, 60, False, "HIGH SCORES", font2, (255, 255, 150))
         self.game_objs_text_boxes["high_scores"] = text_1
 
+        # The offset y for the score images.
         offset_y = 100
 
+        # Render all the scores for the screen.
         for score in self.high_scores:
+            # The text box for the score.
             text_2 = TextBox(232, offset_y, False, str(score), font3, (255, 255, 0))
             self.game_objs_text_boxes["score_1" + str(offset_y)] = text_2
 
+            # Increment the offset y by 20.
             offset_y += 20
 
+        # The back button for the high scores.
         high_scores_button = Button(232, 530, 2, "BACK", (100, 100, 100), (200, 200, 200),
                                     font2, self.input_manager)
         self.game_objs_buttons.append(high_scores_button)
@@ -380,328 +567,7 @@ class GameSystem:
 
             # Animate the title screen.
             if self.game_mode == 0:
-                if self.title_anim_mode == 0:
-                    if self.cur_anim_title_1 >= self.max_anim_title_1:
-                        self.cur_anim_title_1 = 0
-                        self.title_anim_mode = 1
-                        self.game_objs_title_images.remove(self.power_pellet_title_animation)
-                        self.power_pellet_title_animation = None
-                        self.pacman_title_animation.angle = 180
-                        self.cur_anim_title_pacman = 0
-                    else:
-                        self.cur_anim_title_1 += 1
-
-                        self.pacman_title_animation.position_x += 2
-                        self.blinky_title_animation.position_x += 2
-                        self.pinky_title_animation.position_x += 2
-                        self.inky_title_animation.position_x += 2
-                        self.clyde_title_animation.position_x += 2
-
-                        if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
-                            self.cur_anim_title_pacman = 0
-                        else:
-                            self.cur_anim_title_pacman += 1
-
-                        if self.cur_anim_title_pacman == 0 or self.cur_anim_title_pacman == 4:
-                            self.pacman_title_animation.image = self.sprite_images["pacman_run1.png"]
-                        elif self.cur_anim_title_pacman == 1 or self.cur_anim_title_pacman == 3:
-                            self.pacman_title_animation.image = self.sprite_images["pacman_run2.png"]
-                        elif self.cur_anim_title_pacman == 2:
-                            self.pacman_title_animation.image = self.sprite_images["pacman_run3.png"]
-                        elif self.cur_anim_title_pacman == 5:
-                            self.pacman_title_animation.image = self.sprite_images["pacman_idle.png"]
-
-                        if self.cur_anim_title_pacman == 0:
-                            self.blinky_title_animation.image = self.sprite_images["blinky_run_r1.png"]
-                            self.pinky_title_animation.image = self.sprite_images["pinky_run_r1.png"]
-                            self.inky_title_animation.image = self.sprite_images["inky_run_r1.png"]
-                            self.clyde_title_animation.image = self.sprite_images["clyde_run_r1.png"]
-                        elif self.cur_anim_title_pacman == 3:
-                            self.blinky_title_animation.image = self.sprite_images["blinky_run_r2.png"]
-                            self.pinky_title_animation.image = self.sprite_images["pinky_run_r2.png"]
-                            self.inky_title_animation.image = self.sprite_images["inky_run_r2.png"]
-                            self.clyde_title_animation.image = self.sprite_images["clyde_run_r2.png"]
-
-                elif self.title_anim_mode == 1:
-                    if self.cur_anim_title_2 >= self.max_anim_title_2:
-                        self.cur_anim_title_2 = 0
-                        self.title_anim_mode = 2
-                        self.blinky_title_animation.position_x = -32
-                        self.blinky_title_animation.position_y = 238
-                        self.cur_anim_title_pacman = 0
-                    else:
-                        self.cur_anim_title_2 += 1
-
-                        self.pacman_title_animation.position_x -= 2
-                        if self.cur_anim_title_2 < 25:
-                            self.blinky_title_animation.position_x -= 0.5
-                        elif self.cur_anim_title_2 > 75:
-                            self.blinky_title_animation.position_x += 4.0
-
-                        if self.cur_anim_title_2 < 50:
-                            self.pinky_title_animation.position_x -= 0.5
-                        elif self.cur_anim_title_2 > 100:
-                            self.pinky_title_animation.position_x += 4.0
-
-                        if self.cur_anim_title_2 < 75:
-                            self.inky_title_animation.position_x -= 0.5
-                        elif self.cur_anim_title_2 > 125:
-                            self.inky_title_animation.position_x += 4.0
-
-                        if self.cur_anim_title_2 < 100:
-                            self.clyde_title_animation.position_x -= 0.5
-                        elif self.cur_anim_title_2 > 150:
-                            self.clyde_title_animation.position_x += 4.0
-
-                        if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
-                            self.cur_anim_title_pacman = 0
-                        else:
-                            self.cur_anim_title_pacman += 1
-
-                        if self.cur_anim_title_pacman == 0 or self.cur_anim_title_pacman == 4:
-                            self.pacman_title_animation.image = self.sprite_images["pacman_run1.png"]
-                        elif self.cur_anim_title_pacman == 1 or self.cur_anim_title_pacman == 3:
-                            self.pacman_title_animation.image = self.sprite_images["pacman_run2.png"]
-                        elif self.cur_anim_title_pacman == 2:
-                            self.pacman_title_animation.image = self.sprite_images["pacman_run3.png"]
-                        elif self.cur_anim_title_pacman == 5:
-                            self.pacman_title_animation.image = self.sprite_images["pacman_idle.png"]
-
-                        if self.cur_anim_title_pacman == 0:
-                            if self.cur_anim_title_2 < 25:
-                                self.blinky_title_animation.image = self.sprite_images["blue_run1.png"]
-                            if self.cur_anim_title_2 < 50:
-                                self.pinky_title_animation.image = self.sprite_images["blue_run1.png"]
-                            if self.cur_anim_title_2 < 75:
-                                self.inky_title_animation.image = self.sprite_images["blue_run1.png"]
-                            if self.cur_anim_title_2 < 100:
-                                self.clyde_title_animation.image = self.sprite_images["blue_run1.png"]
-                        elif self.cur_anim_title_pacman == 3:
-                            if self.cur_anim_title_2 < 25:
-                                self.blinky_title_animation.image = self.sprite_images["blue_run2.png"]
-                            if self.cur_anim_title_2 < 50:
-                                self.pinky_title_animation.image = self.sprite_images["blue_run2.png"]
-                            if self.cur_anim_title_2 < 75:
-                                self.inky_title_animation.image = self.sprite_images["blue_run2.png"]
-                            if self.cur_anim_title_2 < 100:
-                                self.clyde_title_animation.image = self.sprite_images["blue_run2.png"]
-
-                        if self.cur_anim_title_2 == 25:
-                            self.blinky_title_animation.image = self.sprite_images["200.png"]
-                        elif self.cur_anim_title_2 == 50:
-                            self.pinky_title_animation.image = self.sprite_images["400.png"]
-                        elif self.cur_anim_title_2 == 75:
-                            self.inky_title_animation.image = self.sprite_images["800.png"]
-                            self.blinky_title_animation.image = self.sprite_images["eyes_r.png"]
-                        elif self.cur_anim_title_2 == 100:
-                            self.clyde_title_animation.image = self.sprite_images["1600.png"]
-                            self.pinky_title_animation.image = self.sprite_images["eyes_r.png"]
-                        elif self.cur_anim_title_2 == 125:
-                            self.inky_title_animation.image = self.sprite_images["eyes_r.png"]
-                        elif self.cur_anim_title_2 == 150:
-                            self.clyde_title_animation.image = self.sprite_images["eyes_r.png"]
-
-                elif self.title_anim_mode == 2:
-                    if self.cur_anim_title_3 >= self.max_anim_title_3:
-                        self.cur_anim_title_3 = 0
-                        self.title_anim_mode = 3
-
-                        font1 = self.fonts["PressStart2P-small"]
-
-                        text_1 = TextBox(232, 238, False, "\"BLINKY\"", font1, (255, 0, 0))
-                        self.game_objs_text_boxes["blinky"] = text_1
-
-                        self.blinky_name = text_1
-                        self.cur_anim_title_pacman = 0
-                    else:
-                        self.cur_anim_title_3 += 1
-
-                        if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
-                            self.cur_anim_title_pacman = 0
-                        else:
-                            self.cur_anim_title_pacman += 1
-
-                        self.blinky_title_animation.position_x += 3.0
-
-                        if self.cur_anim_title_pacman == 0:
-                            self.blinky_title_animation.image = self.sprite_images["blinky_run_r1.png"]
-                        elif self.cur_anim_title_pacman == 3:
-                            self.blinky_title_animation.image = self.sprite_images["blinky_run_r2.png"]
-
-                elif self.title_anim_mode == 3:
-                    if self.cur_anim_title_4 >= self.max_anim_title_4:
-                        self.cur_anim_title_4 = 0
-                        self.title_anim_mode = 4
-                        self.pinky_title_animation.position_x = -32
-                        self.pinky_title_animation.position_y = 270
-                        self.cur_anim_title_pacman = 0
-                    else:
-                        self.cur_anim_title_4 += 1
-
-                elif self.title_anim_mode == 4:
-                    if self.cur_anim_title_3 >= self.max_anim_title_3:
-                        self.cur_anim_title_3 = 0
-                        self.title_anim_mode = 5
-
-                        font1 = self.fonts["PressStart2P-small"]
-
-                        text_1 = TextBox(232, 270, False, "\"PINKY\"", font1, (255, 200, 220))
-                        self.game_objs_text_boxes["pinky"] = text_1
-
-                        self.pinky_name = text_1
-                    else:
-                        self.cur_anim_title_3 += 1
-
-                        if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
-                            self.cur_anim_title_pacman = 0
-                        else:
-                            self.cur_anim_title_pacman += 1
-
-                        self.pinky_title_animation.position_x += 3.0
-
-                        if self.cur_anim_title_pacman == 0:
-                            self.pinky_title_animation.image = self.sprite_images["pinky_run_r1.png"]
-                        elif self.cur_anim_title_pacman == 3:
-                            self.pinky_title_animation.image = self.sprite_images["pinky_run_r2.png"]
-
-                elif self.title_anim_mode == 5:
-                    if self.cur_anim_title_4 >= self.max_anim_title_4:
-                        self.cur_anim_title_4 = 0
-                        self.title_anim_mode = 6
-                        self.inky_title_animation.position_x = -32
-                        self.inky_title_animation.position_y = 302
-                        self.cur_anim_title_pacman = 0
-                    else:
-                        self.cur_anim_title_4 += 1
-
-                elif self.title_anim_mode == 6:
-                    if self.cur_anim_title_3 >= self.max_anim_title_3:
-                        self.cur_anim_title_3 = 0
-                        self.title_anim_mode = 7
-
-                        font1 = self.fonts["PressStart2P-small"]
-
-                        text_1 = TextBox(232, 302, False, "\"INKY\"", font1, (0, 255, 255))
-                        self.game_objs_text_boxes["inky"] = text_1
-
-                        self.inky_name = text_1
-                    else:
-                        self.cur_anim_title_3 += 1
-
-                        if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
-                            self.cur_anim_title_pacman = 0
-                        else:
-                            self.cur_anim_title_pacman += 1
-
-                        self.inky_title_animation.position_x += 3.0
-
-                        if self.cur_anim_title_pacman == 0:
-                            self.inky_title_animation.image = self.sprite_images["inky_run_r1.png"]
-                        elif self.cur_anim_title_pacman == 3:
-                            self.inky_title_animation.image = self.sprite_images["inky_run_r2.png"]
-
-                elif self.title_anim_mode == 7:
-                    if self.cur_anim_title_4 >= self.max_anim_title_4:
-                        self.cur_anim_title_4 = 0
-                        self.title_anim_mode = 8
-                        self.clyde_title_animation.position_x = -32
-                        self.clyde_title_animation.position_y = 334
-                        self.cur_anim_title_pacman = 0
-                    else:
-                        self.cur_anim_title_4 += 1
-
-                elif self.title_anim_mode == 8:
-                    if self.cur_anim_title_3 >= self.max_anim_title_3:
-                        self.cur_anim_title_3 = 0
-                        self.title_anim_mode = 9
-
-                        font1 = self.fonts["PressStart2P-small"]
-
-                        text_1 = TextBox(232, 334, False, "\"CLYDE\"", font1, (255, 200, 0))
-                        self.game_objs_text_boxes["clyde"] = text_1
-
-                        self.clyde_name = text_1
-                    else:
-                        self.cur_anim_title_3 += 1
-
-                        if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
-                            self.cur_anim_title_pacman = 0
-                        else:
-                            self.cur_anim_title_pacman += 1
-
-                        self.clyde_title_animation.position_x += 3.0
-
-                        if self.cur_anim_title_pacman == 0:
-                            self.clyde_title_animation.image = self.sprite_images["clyde_run_r1.png"]
-                        elif self.cur_anim_title_pacman == 3:
-                            self.clyde_title_animation.image = self.sprite_images["clyde_run_r2.png"]
-
-                elif self.title_anim_mode == 9:
-                    if self.cur_anim_title_5 >= self.max_anim_title_5:
-                        self.cur_anim_title_5 = 0
-                        self.title_anim_mode = 10
-                        self.cur_anim_title_pacman = 0
-                    else:
-                        self.cur_anim_title_5 += 1
-
-                elif self.title_anim_mode == 10:
-                    if self.cur_anim_title_5 >= self.max_anim_title_5:
-                        self.cur_anim_title_5 = 0
-                        self.title_anim_mode = 0
-
-                        power_pellet_t = GameObject(360, 268)
-                        power_pellet_t.image = self.sprite_images["pellet.png"]
-                        power_pellet_t.image_rect = pygame.Rect(power_pellet_t.position_x, power_pellet_t.position_y,
-                                                                32, 32)
-                        self.game_objs_title_images.append(power_pellet_t)
-                        self.power_pellet_title_animation = power_pellet_t
-
-                        self.pacman_title_animation.position_x = 0
-                        self.pacman_title_animation.angle = 0
-                        self.blinky_title_animation.position_x = -40
-                        self.blinky_title_animation.position_y = 260
-                        self.pinky_title_animation.position_x = -80
-                        self.pinky_title_animation.position_y = 260
-                        self.inky_title_animation.position_x = -120
-                        self.inky_title_animation.position_y = 260
-                        self.clyde_title_animation.position_x = -160
-                        self.clyde_title_animation.position_y = 260
-                    else:
-                        self.cur_anim_title_5 += 1
-
-                        self.game_objs_text_boxes.pop("blinky", None)
-                        self.blinky_name = None
-                        self.game_objs_text_boxes.pop("pinky", None)
-                        self.pinky_name = None
-                        self.game_objs_text_boxes.pop("inky", None)
-                        self.inky_name = None
-                        self.game_objs_text_boxes.pop("clyde", None)
-                        self.clyde_name = None
-
-                        self.blinky_title_animation.position_x += 5.0
-
-                        if self.cur_anim_title_5 >= 20:
-                            self.pinky_title_animation.position_x += 5.0
-                        if self.cur_anim_title_5 >= 40:
-                            self.inky_title_animation.position_x += 5.0
-                        if self.cur_anim_title_5 >= 60:
-                            self.clyde_title_animation.position_x += 5.0
-
-                        if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
-                            self.cur_anim_title_pacman = 0
-                        else:
-                            self.cur_anim_title_pacman += 1
-
-                        if self.cur_anim_title_pacman == 0:
-                            self.blinky_title_animation.image = self.sprite_images["blinky_run_r1.png"]
-                            self.pinky_title_animation.image = self.sprite_images["pinky_run_r1.png"]
-                            self.inky_title_animation.image = self.sprite_images["inky_run_r1.png"]
-                            self.clyde_title_animation.image = self.sprite_images["clyde_run_r1.png"]
-                        elif self.cur_anim_title_pacman == 3:
-                            self.blinky_title_animation.image = self.sprite_images["blinky_run_r2.png"]
-                            self.pinky_title_animation.image = self.sprite_images["pinky_run_r2.png"]
-                            self.inky_title_animation.image = self.sprite_images["inky_run_r2.png"]
-                            self.clyde_title_animation.image = self.sprite_images["clyde_run_r2.png"]
+                self.animate_title_screen()
 
             # Check every frame if there are ghosts that are reviving. If so, tell blinky to play the ghost revive
             # music.
@@ -800,7 +666,8 @@ class GameSystem:
                 self.game_obj_player.update_obj()
 
             # Check if creating the portal shots.
-            if self.game_obj_player is not None and self.game_obj_player.ready_mode == 2:
+            if self.game_obj_player is not None and not self.game_obj_player.is_dead and \
+                    not self.game_obj_player.finished_map and self.game_obj_player.ready_mode == 2:
                 if self.input_manager.pressed_z and self.portal_shot_1 is None:
                     self.portal_shot_1 = PortalShot(int(self.game_obj_player.position_x),
                                                     int(self.game_obj_player.position_y), 0,
@@ -872,6 +739,367 @@ class GameSystem:
         # Clean up the game system.
         self.clean_up()
 
+    def animate_title_screen(self):
+        """Animates the title screen."""
+
+        # Animate different animation sequences based on the title animation mode.
+        if self.title_anim_mode == 0:
+
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_1 >= self.max_anim_title_1:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_1 = 0
+                self.title_anim_mode = 1
+                self.game_objs_title_images.remove(self.power_pellet_title_animation)
+                self.power_pellet_title_animation = None
+                self.pacman_title_animation.angle = 180
+                self.cur_anim_title_pacman = 0
+            else:
+                # Update the title animation.
+                self.cur_anim_title_1 += 1
+
+                self.pacman_title_animation.position_x += 2
+                self.blinky_title_animation.position_x += 2
+                self.pinky_title_animation.position_x += 2
+                self.inky_title_animation.position_x += 2
+                self.clyde_title_animation.position_x += 2
+
+                if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
+                    self.cur_anim_title_pacman = 0
+                else:
+                    self.cur_anim_title_pacman += 1
+
+                if self.cur_anim_title_pacman == 0 or self.cur_anim_title_pacman == 4:
+                    self.pacman_title_animation.image = self.sprite_images["pacman_run1.png"]
+                elif self.cur_anim_title_pacman == 1 or self.cur_anim_title_pacman == 3:
+                    self.pacman_title_animation.image = self.sprite_images["pacman_run2.png"]
+                elif self.cur_anim_title_pacman == 2:
+                    self.pacman_title_animation.image = self.sprite_images["pacman_run3.png"]
+                elif self.cur_anim_title_pacman == 5:
+                    self.pacman_title_animation.image = self.sprite_images["pacman_idle.png"]
+
+                if self.cur_anim_title_pacman == 0:
+                    self.blinky_title_animation.image = self.sprite_images["blinky_run_r1.png"]
+                    self.pinky_title_animation.image = self.sprite_images["pinky_run_r1.png"]
+                    self.inky_title_animation.image = self.sprite_images["inky_run_r1.png"]
+                    self.clyde_title_animation.image = self.sprite_images["clyde_run_r1.png"]
+                elif self.cur_anim_title_pacman == 3:
+                    self.blinky_title_animation.image = self.sprite_images["blinky_run_r2.png"]
+                    self.pinky_title_animation.image = self.sprite_images["pinky_run_r2.png"]
+                    self.inky_title_animation.image = self.sprite_images["inky_run_r2.png"]
+                    self.clyde_title_animation.image = self.sprite_images["clyde_run_r2.png"]
+
+        elif self.title_anim_mode == 1:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_2 >= self.max_anim_title_2:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_2 = 0
+                self.title_anim_mode = 2
+                self.blinky_title_animation.position_x = -32
+                self.blinky_title_animation.position_y = 238
+                self.cur_anim_title_pacman = 0
+            else:
+                # Update the title animation.
+                self.cur_anim_title_2 += 1
+
+                self.pacman_title_animation.position_x -= 2
+                if self.cur_anim_title_2 < 25:
+                    self.blinky_title_animation.position_x -= 0.5
+                elif self.cur_anim_title_2 > 75:
+                    self.blinky_title_animation.position_x += 4.0
+
+                if self.cur_anim_title_2 < 50:
+                    self.pinky_title_animation.position_x -= 0.5
+                elif self.cur_anim_title_2 > 100:
+                    self.pinky_title_animation.position_x += 4.0
+
+                if self.cur_anim_title_2 < 75:
+                    self.inky_title_animation.position_x -= 0.5
+                elif self.cur_anim_title_2 > 125:
+                    self.inky_title_animation.position_x += 4.0
+
+                if self.cur_anim_title_2 < 100:
+                    self.clyde_title_animation.position_x -= 0.5
+                elif self.cur_anim_title_2 > 150:
+                    self.clyde_title_animation.position_x += 4.0
+
+                if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
+                    self.cur_anim_title_pacman = 0
+                else:
+                    self.cur_anim_title_pacman += 1
+
+                if self.cur_anim_title_pacman == 0 or self.cur_anim_title_pacman == 4:
+                    self.pacman_title_animation.image = self.sprite_images["pacman_run1.png"]
+                elif self.cur_anim_title_pacman == 1 or self.cur_anim_title_pacman == 3:
+                    self.pacman_title_animation.image = self.sprite_images["pacman_run2.png"]
+                elif self.cur_anim_title_pacman == 2:
+                    self.pacman_title_animation.image = self.sprite_images["pacman_run3.png"]
+                elif self.cur_anim_title_pacman == 5:
+                    self.pacman_title_animation.image = self.sprite_images["pacman_idle.png"]
+
+                if self.cur_anim_title_pacman == 0:
+                    if self.cur_anim_title_2 < 25:
+                        self.blinky_title_animation.image = self.sprite_images["blue_run1.png"]
+                    if self.cur_anim_title_2 < 50:
+                        self.pinky_title_animation.image = self.sprite_images["blue_run1.png"]
+                    if self.cur_anim_title_2 < 75:
+                        self.inky_title_animation.image = self.sprite_images["blue_run1.png"]
+                    if self.cur_anim_title_2 < 100:
+                        self.clyde_title_animation.image = self.sprite_images["blue_run1.png"]
+                elif self.cur_anim_title_pacman == 3:
+                    if self.cur_anim_title_2 < 25:
+                        self.blinky_title_animation.image = self.sprite_images["blue_run2.png"]
+                    if self.cur_anim_title_2 < 50:
+                        self.pinky_title_animation.image = self.sprite_images["blue_run2.png"]
+                    if self.cur_anim_title_2 < 75:
+                        self.inky_title_animation.image = self.sprite_images["blue_run2.png"]
+                    if self.cur_anim_title_2 < 100:
+                        self.clyde_title_animation.image = self.sprite_images["blue_run2.png"]
+
+                if self.cur_anim_title_2 == 25:
+                    self.blinky_title_animation.image = self.sprite_images["200.png"]
+                elif self.cur_anim_title_2 == 50:
+                    self.pinky_title_animation.image = self.sprite_images["400.png"]
+                elif self.cur_anim_title_2 == 75:
+                    self.inky_title_animation.image = self.sprite_images["800.png"]
+                    self.blinky_title_animation.image = self.sprite_images["eyes_r.png"]
+                elif self.cur_anim_title_2 == 100:
+                    self.clyde_title_animation.image = self.sprite_images["1600.png"]
+                    self.pinky_title_animation.image = self.sprite_images["eyes_r.png"]
+                elif self.cur_anim_title_2 == 125:
+                    self.inky_title_animation.image = self.sprite_images["eyes_r.png"]
+                elif self.cur_anim_title_2 == 150:
+                    self.clyde_title_animation.image = self.sprite_images["eyes_r.png"]
+
+        elif self.title_anim_mode == 2:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_3 >= self.max_anim_title_3:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_3 = 0
+                self.title_anim_mode = 3
+
+                font1 = self.fonts["PressStart2P-small"]
+
+                text_1 = TextBox(232, 238, False, "\"BLINKY\"", font1, (255, 0, 0))
+                self.game_objs_text_boxes["blinky"] = text_1
+
+                self.blinky_name = text_1
+                self.cur_anim_title_pacman = 0
+            else:
+                # Update the title animation.
+                self.cur_anim_title_3 += 1
+
+                if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
+                    self.cur_anim_title_pacman = 0
+                else:
+                    self.cur_anim_title_pacman += 1
+
+                self.blinky_title_animation.position_x += 3.0
+
+                if self.cur_anim_title_pacman == 0:
+                    self.blinky_title_animation.image = self.sprite_images["blinky_run_r1.png"]
+                elif self.cur_anim_title_pacman == 3:
+                    self.blinky_title_animation.image = self.sprite_images["blinky_run_r2.png"]
+
+        elif self.title_anim_mode == 3:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_4 >= self.max_anim_title_4:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_4 = 0
+                self.title_anim_mode = 4
+                self.pinky_title_animation.position_x = -32
+                self.pinky_title_animation.position_y = 270
+                self.cur_anim_title_pacman = 0
+            else:
+                # Update the title animation.
+                self.cur_anim_title_4 += 1
+
+        elif self.title_anim_mode == 4:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_3 >= self.max_anim_title_3:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_3 = 0
+                self.title_anim_mode = 5
+
+                font1 = self.fonts["PressStart2P-small"]
+
+                text_1 = TextBox(232, 270, False, "\"PINKY\"", font1, (255, 200, 220))
+                self.game_objs_text_boxes["pinky"] = text_1
+
+                self.pinky_name = text_1
+            else:
+                # Update the title animation.
+                self.cur_anim_title_3 += 1
+
+                if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
+                    self.cur_anim_title_pacman = 0
+                else:
+                    self.cur_anim_title_pacman += 1
+
+                self.pinky_title_animation.position_x += 3.0
+
+                if self.cur_anim_title_pacman == 0:
+                    self.pinky_title_animation.image = self.sprite_images["pinky_run_r1.png"]
+                elif self.cur_anim_title_pacman == 3:
+                    self.pinky_title_animation.image = self.sprite_images["pinky_run_r2.png"]
+
+        elif self.title_anim_mode == 5:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_4 >= self.max_anim_title_4:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_4 = 0
+                self.title_anim_mode = 6
+                self.inky_title_animation.position_x = -32
+                self.inky_title_animation.position_y = 302
+                self.cur_anim_title_pacman = 0
+            else:
+                # Update the title animation.
+                self.cur_anim_title_4 += 1
+
+        elif self.title_anim_mode == 6:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_3 >= self.max_anim_title_3:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_3 = 0
+                self.title_anim_mode = 7
+
+                font1 = self.fonts["PressStart2P-small"]
+
+                text_1 = TextBox(232, 302, False, "\"INKY\"", font1, (0, 255, 255))
+                self.game_objs_text_boxes["inky"] = text_1
+
+                self.inky_name = text_1
+            else:
+                # Update the title animation.
+                self.cur_anim_title_3 += 1
+
+                if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
+                    self.cur_anim_title_pacman = 0
+                else:
+                    self.cur_anim_title_pacman += 1
+
+                self.inky_title_animation.position_x += 3.0
+
+                if self.cur_anim_title_pacman == 0:
+                    self.inky_title_animation.image = self.sprite_images["inky_run_r1.png"]
+                elif self.cur_anim_title_pacman == 3:
+                    self.inky_title_animation.image = self.sprite_images["inky_run_r2.png"]
+
+        elif self.title_anim_mode == 7:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_4 >= self.max_anim_title_4:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_4 = 0
+                self.title_anim_mode = 8
+                self.clyde_title_animation.position_x = -32
+                self.clyde_title_animation.position_y = 334
+                self.cur_anim_title_pacman = 0
+            else:
+                # Update the title animation.
+                self.cur_anim_title_4 += 1
+
+        elif self.title_anim_mode == 8:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_3 >= self.max_anim_title_3:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_3 = 0
+                self.title_anim_mode = 9
+
+                font1 = self.fonts["PressStart2P-small"]
+
+                text_1 = TextBox(232, 334, False, "\"CLYDE\"", font1, (255, 200, 0))
+                self.game_objs_text_boxes["clyde"] = text_1
+
+                self.clyde_name = text_1
+            else:
+                # Update the title animation.
+                self.cur_anim_title_3 += 1
+
+                if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
+                    self.cur_anim_title_pacman = 0
+                else:
+                    self.cur_anim_title_pacman += 1
+
+                self.clyde_title_animation.position_x += 3.0
+
+                if self.cur_anim_title_pacman == 0:
+                    self.clyde_title_animation.image = self.sprite_images["clyde_run_r1.png"]
+                elif self.cur_anim_title_pacman == 3:
+                    self.clyde_title_animation.image = self.sprite_images["clyde_run_r2.png"]
+
+        elif self.title_anim_mode == 9:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_5 >= self.max_anim_title_5:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_5 = 0
+                self.title_anim_mode = 10
+                self.cur_anim_title_pacman = 0
+            else:
+                # Update the title animation.
+                self.cur_anim_title_5 += 1
+
+        elif self.title_anim_mode == 10:
+            # If the title animation is finished, switch to the next title animation.
+            if self.cur_anim_title_5 >= self.max_anim_title_5:
+                # Set the defaults for the next title animation.
+                self.cur_anim_title_5 = 0
+                self.title_anim_mode = 0
+
+                power_pellet_t = GameObject(360, 268)
+                power_pellet_t.image = self.sprite_images["pellet.png"]
+                power_pellet_t.image_rect = pygame.Rect(power_pellet_t.position_x, power_pellet_t.position_y,
+                                                        32, 32)
+                self.game_objs_title_images.append(power_pellet_t)
+                self.power_pellet_title_animation = power_pellet_t
+
+                self.pacman_title_animation.position_x = 0
+                self.pacman_title_animation.angle = 0
+                self.blinky_title_animation.position_x = -40
+                self.blinky_title_animation.position_y = 260
+                self.pinky_title_animation.position_x = -80
+                self.pinky_title_animation.position_y = 260
+                self.inky_title_animation.position_x = -120
+                self.inky_title_animation.position_y = 260
+                self.clyde_title_animation.position_x = -160
+                self.clyde_title_animation.position_y = 260
+            else:
+                # Update the title animation.
+                self.cur_anim_title_5 += 1
+
+                self.game_objs_text_boxes.pop("blinky", None)
+                self.blinky_name = None
+                self.game_objs_text_boxes.pop("pinky", None)
+                self.pinky_name = None
+                self.game_objs_text_boxes.pop("inky", None)
+                self.inky_name = None
+                self.game_objs_text_boxes.pop("clyde", None)
+                self.clyde_name = None
+
+                self.blinky_title_animation.position_x += 5.0
+
+                if self.cur_anim_title_5 >= 20:
+                    self.pinky_title_animation.position_x += 5.0
+                if self.cur_anim_title_5 >= 40:
+                    self.inky_title_animation.position_x += 5.0
+                if self.cur_anim_title_5 >= 60:
+                    self.clyde_title_animation.position_x += 5.0
+
+                if self.cur_anim_title_pacman >= self.max_anim_title_pacman:
+                    self.cur_anim_title_pacman = 0
+                else:
+                    self.cur_anim_title_pacman += 1
+
+                if self.cur_anim_title_pacman == 0:
+                    self.blinky_title_animation.image = self.sprite_images["blinky_run_r1.png"]
+                    self.pinky_title_animation.image = self.sprite_images["pinky_run_r1.png"]
+                    self.inky_title_animation.image = self.sprite_images["inky_run_r1.png"]
+                    self.clyde_title_animation.image = self.sprite_images["clyde_run_r1.png"]
+                elif self.cur_anim_title_pacman == 3:
+                    self.blinky_title_animation.image = self.sprite_images["blinky_run_r2.png"]
+                    self.pinky_title_animation.image = self.sprite_images["pinky_run_r2.png"]
+                    self.inky_title_animation.image = self.sprite_images["inky_run_r2.png"]
+                    self.clyde_title_animation.image = self.sprite_images["clyde_run_r2.png"]
+
     def load_map(self, destroy_dots_and_pellets):
         """Loads the pacman game map."""
 
@@ -909,6 +1137,7 @@ class GameSystem:
                     # The current background tile being produced.
                     background_tile1 = None
 
+                    # Choose a different sprite based on the character.
                     if char == '|':
                         background_tile1 = BackgroundTile(self.sprite_images["wls.png"],
                                                           self.sprite_images["wls_w.png"],
@@ -1291,6 +1520,8 @@ class GameSystem:
             self.game_obj_player.ready_mode = 1
 
     def collision_detection(self):
+        """Performs the collision detection."""
+
         # Check for collisions between the player and the walls.
         if self.game_obj_player is not None and not self.game_obj_player.is_traveling:
             for cur_game_obj in self.game_objs_tiles:
@@ -1625,10 +1856,15 @@ class GameSystem:
         pygame.display.flip()
 
     def render_game_obj_group(self, game_obj_group, apply_rotation):
+        """Renders a single game object group."""
+
+        # Loop through every game object and render it.
         for game_obj in game_obj_group:
             self.render_game_obj(game_obj, apply_rotation)
 
     def render_game_obj(self, game_obj, apply_rotation):
+        """Renders a single game object."""
+
         # If there is no image, don't render it.
         if game_obj.image is not None:
             # Update the object rect for the rendering process.
@@ -1648,6 +1884,7 @@ class GameSystem:
                 self.backbuffer.blit(cur_image, cur_rect)
 
     def add_new_high_score(self, high_score):
+        """Adds a new high score to the high score table."""
 
         # Add the new high score by comparing to other high scores.
         for x in range(0, len(self.high_scores)):
@@ -1657,6 +1894,7 @@ class GameSystem:
                 break
 
     def export_new_high_scores(self):
+        """Exports the new high scores to the high scores file."""
 
         # The out file for the high scores.
         out_file = open("high_scores.bin", "wb")
