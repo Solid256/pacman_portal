@@ -8,6 +8,39 @@ class Player(GameObject):
                  game_obj_fruit, game_objs_ghosts, game_objs_text_boxes, sound_manager, sprites):
         """The init function for initializing the default values."""
         super(Player, self).__init__(x, y)
+        self.in_portal = False
+        self.leaving_portal = False
+
+        # Checks if Pacman is running or not.
+        self.is_running = True
+
+        # Checks if Pacman is traveling or not.
+        self.is_traveling = False
+
+        # Checks if Pacman is dead or not.
+        self.is_dead = False
+
+        self.ate_dot_1 = False
+
+        # Checks if the death animation is running.
+        self.run_anim_death = False
+
+        # Checks if losing a life and/or restarting a level.
+        self.lose_life = False
+
+        # Checks if pacman has eaten the pellet.
+        self.ate_pellet = False
+
+        # Checks if the player has just eaten a ghost.
+        self.just_ate_ghost = False
+
+        # Checks if the map was finished.
+        self.finished_map = False
+
+        self.finished_map_waiting = True
+
+        self.finished_map_finished_anim = False
+
         self.sprites = sprites
         self.sound_manager = sound_manager
         self.input_manager = input_manager
@@ -57,17 +90,6 @@ class Player(GameObject):
         # The running speed of Pacman.
         self.run_speed = 2.0
 
-        # Checks if Pacman is running or not.
-        self.is_running = True
-
-        # Checks if Pacman is traveling or not.
-        self.is_traveling = False
-
-        # Checks if Pacman is dead or not.
-        self.is_dead = False
-
-        self.ate_dot_1 = False
-
         # The running direction of Pacman.
         # 0 - left.
         # 1 - right.
@@ -90,15 +112,6 @@ class Player(GameObject):
         # The maximum animation frame for the death animation.
         self.max_anim_death = 96
 
-        # Checks if the death animation is running.
-        self.run_anim_death = False
-
-        # Checks if losing a life and/or restarting a level.
-        self.lose_life = False
-
-        # Checks if pacman has eaten the pellet.
-        self.ate_pellet = False
-
         # The current animation frame for the ate pellet animation.
         self.cur_anim_ate_pellet = 0
 
@@ -109,21 +122,11 @@ class Player(GameObject):
         # How many ghosts the player has eaten with a single power pellet.
         self.streak = 0
 
-        # Checks if the player has just eaten a ghost.
-        self.just_ate_ghost = False
-
         # The number of dots Pacman has eaten.
         self.dots_eaten = dots_eaten
 
-        # Checks if the map was finished.
-        self.finished_map = False
-
-        self.finished_map_waiting = True
-
         self.cur_finished_map_anim = 0
         self.max_finished_map_anim = 120
-
-        self.finished_map_finished_anim = False
 
         self.cur_ready1_anim = 0
         self.max_ready1_anim = 128
@@ -136,8 +139,6 @@ class Player(GameObject):
         # 2 - Ready!
         # 3 - Game over!
         self.ready_mode = 0
-        self.in_portal = False
-        self.leaving_portal = False
         self.cur_anim_portal = 0
         self.max_anim_portal = 6
         self.portal_index = 0
@@ -529,10 +530,12 @@ class Player(GameObject):
                         # Make ghosts invulnerable again. Set their run mode to chase.
                         for ghost in self.game_objs_ghosts:
 
+                            ghost.use_blue_sprites = False
+                            ghost.is_blinking = False
+                            ghost.is_vulnerable = False
+
                             # Only do this if their run mode is equal to 3.
                             if ghost.run_mode == 3:
-                                ghost.is_blinking = False
-                                ghost.is_vulnerable = False
                                 ghost.run_mode = ghost.timed_run_mode
                                 ghost.prev_turn_node = None
                                 ghost.switched_mode = True

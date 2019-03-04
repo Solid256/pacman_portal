@@ -1581,10 +1581,12 @@ class GameSystem:
                         # Only turn ghosts blue if they are not traveling and are not reviving.
                         if not ghost.run_mode == 4 and not ghost.run_mode == 2:
                             ghost.is_vulnerable = True
-                            ghost.is_blinking = False
                             ghost.run_mode = 3
                             ghost.prev_turn_node = None
                             ghost.switched_mode = True
+
+                        ghost.use_blue_sprites = True
+                        ghost.is_blinking = False
 
         # Check for collisions between the player and the ghosts.
         if self.game_obj_player is not None:

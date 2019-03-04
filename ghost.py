@@ -38,6 +38,14 @@ class Ghost(GameObject):
         # Checks if there are ghosts reviving.
         self.ghosts_reviving = False
 
+        self.is_starting_in_ghost_house = False
+
+        self.use_blue_sprites = False
+
+        self.freeze_position = False
+
+        self.started_in_ghost_house = False
+
         self.ghost_type = ghost_type
         self.max_mode_switch_0 = 400
         self.max_mode_switch_1 = max_time_scatter
@@ -147,8 +155,6 @@ class Ghost(GameObject):
         self.sprites = sprites
         self.prev_turn_node = None
 
-        self.freeze_position = False
-
         # Set up the random seed.
         random.seed()
 
@@ -242,6 +248,10 @@ class Ghost(GameObject):
 
         # The predecessors of the child nodes.
         self.predecessors = {}
+
+        # Check if just started in the ghost house.
+        if self.ghost_type == 2 or self.ghost_type == 3:
+            self.started_in_ghost_house = True
 
     def update_obj(self):
         if self.active:
@@ -515,7 +525,7 @@ class Ghost(GameObject):
                     self.image = self.image_eyes_d
 
             elif self.cur_anim_run == 0:
-                if not self.is_vulnerable:
+                if not self.is_vulnerable and not self.use_blue_sprites:
                     if self.run_direction == 0:
                         self.image = self.image_run_l1
                     elif self.run_direction == 1:
@@ -524,14 +534,14 @@ class Ghost(GameObject):
                         self.image = self.image_run_u1
                     elif self.run_direction == 3:
                         self.image = self.image_run_d1
-                elif self.run_mode == 3:
+                elif self.use_blue_sprites:
                     if not self.is_blinking or not self.blink_anim_toggle:
                         self.image = self.image_blue_run1
                     else:
                         self.image = self.image_blue_run3
 
             elif self.cur_anim_run == 8:
-                if not self.is_vulnerable:
+                if not self.is_vulnerable and not self.use_blue_sprites:
                     if self.run_direction == 0:
                         self.image = self.image_run_l2
                     elif self.run_direction == 1:
@@ -540,7 +550,7 @@ class Ghost(GameObject):
                         self.image = self.image_run_u2
                     elif self.run_direction == 3:
                         self.image = self.image_run_d2
-                elif self.run_mode == 3:
+                elif self.use_blue_sprites:
                     if not self.is_blinking or not self.blink_anim_toggle:
                         self.image = self.image_blue_run2
                     else:
@@ -564,7 +574,15 @@ class Ghost(GameObject):
             elif self.spawn_mode == 2:
                 if self.position_y < 238:
                     self.spawn_mode = 0
-                    self.run_mode = self.timed_run_mode
+
+                    if not self.started_in_ghost_house:
+                        self.run_mode = self.timed_run_mode
+                    else:
+                        self.run_mode = 3
+                        self.is_blinking = False
+                        self.is_vulnerable = True
+                        self.started_in_ghost_house = False
+
                     self.position_x = 224
                     self.position_y = 238
 
@@ -590,6 +608,10 @@ class Ghost(GameObject):
                     self.spawn_mode = 2
                     self.run_direction = 2
                     self.dead = False
+
+                    if not self.started_in_ghost_house:
+                        self.use_blue_sprites = False
+                        self.is_vulnerable = False
 
             # Update the collision rect object.
             self.collision_rect.centerx = self.position_x
