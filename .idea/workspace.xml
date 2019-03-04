@@ -2,23 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="18240574-6ba4-4913-9afd-603480c8a373" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a_star_node.py" beforeDir="false" afterPath="$PROJECT_DIR$/a_star_node.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/background_tile.py" beforeDir="false" afterPath="$PROJECT_DIR$/background_tile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/button.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dot.py" beforeDir="false" afterPath="$PROJECT_DIR$/dot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fruit.py" beforeDir="false" afterPath="$PROJECT_DIR$/fruit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_object.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_object.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ghost.py" beforeDir="false" afterPath="$PROJECT_DIR$/ghost.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ghost_house_entrance.py" beforeDir="false" afterPath="$PROJECT_DIR$/ghost_house_entrance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/high_scores.bin" beforeDir="false" afterPath="$PROJECT_DIR$/high_scores.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/input_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pacman.py" beforeDir="false" afterPath="$PROJECT_DIR$/pacman.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pellet.py" beforeDir="false" afterPath="$PROJECT_DIR$/pellet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal_shot.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal_shot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sound_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/sound_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/text_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/text_box.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,23 +20,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game_system.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="684" column="94" lean-forward="true" selection-start-line="684" selection-start-column="94" selection-end-line="684" selection-end-column="94" />
+            <state relative-caret-position="561">
+              <caret line="617" column="39" lean-forward="true" selection-start-line="617" selection-start-column="39" selection-end-line="617" selection-end-column="39" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#4624#5336#0" />
+                <element signature="e#5380#6883#0" />
+                <element signature="e#10406#14109#0" />
+                <element signature="e#15523#16212#0" />
+                <element signature="e#16531#17782#0" />
                 <element signature="e#27156#45426#0" />
                 <element signature="e#39691#64233#0" />
                 <element signature="e#77169#80887#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/text_box.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
@@ -98,6 +80,15 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sound_manager.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-255">
+              <caret line="5" column="68" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fruit.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-765">
@@ -121,11 +112,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ghost.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1719">
-              <caret line="362" column="53" selection-start-line="362" selection-start-column="45" selection-end-line="362" selection-end-column="53" />
+            <state relative-caret-position="136">
+              <caret line="998" column="13" selection-start-line="998" selection-start-column="13" selection-end-line="998" selection-end-column="13" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
-                <element signature="e#25032#44293#0" />
               </folding>
             </state>
           </provider>
@@ -134,8 +124,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pacman.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="118" column="25" selection-start-line="118" selection-start-column="13" selection-end-line="118" selection-end-column="25" />
+            <state relative-caret-position="238">
+              <caret line="63" column="25" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -164,7 +154,6 @@
         <option value="$PROJECT_DIR$/build_script/cx_freeze_setup.py" />
         <option value="$PROJECT_DIR$/ghost_house_entrance.py" />
         <option value="$PROJECT_DIR$/input_manager.py" />
-        <option value="$PROJECT_DIR$/pacman.py" />
         <option value="$PROJECT_DIR$/pellet.py" />
         <option value="$PROJECT_DIR$/portal_shot.py" />
         <option value="$PROJECT_DIR$/sound_manager.py" />
@@ -176,6 +165,7 @@
         <option value="$PROJECT_DIR$/fruit.py" />
         <option value="$PROJECT_DIR$/game_object.py" />
         <option value="$PROJECT_DIR$/game_system.py" />
+        <option value="$PROJECT_DIR$/pacman.py" />
         <option value="$PROJECT_DIR$/ghost.py" />
       </list>
     </option>
@@ -293,18 +283,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.50339216" side_tool="true" weight="0.17860906" />
       <window_info content_ui="combo" id="Project" order="1" sideWeight="0.49660787" visible="true" weight="0.17860906" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.3296582" />
-      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.5021075" side_tool="true" visible="true" weight="0.20151679" />
+      <window_info active="true" anchor="bottom" id="Event Log" order="1" sideWeight="0.5021075" side_tool="true" visible="true" weight="0.20151679" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.3296582" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="bottom" id="Version Control" order="5" />
-      <window_info active="true" anchor="bottom" id="Run" order="6" sideWeight="0.49789253" visible="true" weight="0.20151679" />
+      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.49789253" visible="true" weight="0.20151679" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -425,13 +414,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sound_manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-688">
-          <caret line="5" column="68" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/text_box.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -490,19 +472,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pacman.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="118" column="25" selection-start-line="118" selection-start-column="13" selection-end-line="118" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game_system.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="684" column="94" lean-forward="true" selection-start-line="684" selection-start-column="94" selection-end-line="684" selection-end-column="94" />
+        <state relative-caret-position="561">
+          <caret line="617" column="39" lean-forward="true" selection-start-line="617" selection-start-column="39" selection-end-line="617" selection-end-column="39" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#4624#5336#0" />
+            <element signature="e#5380#6883#0" />
+            <element signature="e#10406#14109#0" />
+            <element signature="e#15523#16212#0" />
+            <element signature="e#16531#17782#0" />
             <element signature="e#27156#45426#0" />
             <element signature="e#39691#64233#0" />
             <element signature="e#77169#80887#0" />
@@ -510,13 +490,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sound_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-255">
+          <caret line="5" column="68" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pacman.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="63" column="25" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ghost.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1719">
-          <caret line="362" column="53" selection-start-line="362" selection-start-column="45" selection-end-line="362" selection-end-column="53" />
+        <state relative-caret-position="136">
+          <caret line="998" column="13" selection-start-line="998" selection-start-column="13" selection-end-line="998" selection-end-column="13" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
-            <element signature="e#25032#44293#0" />
           </folding>
         </state>
       </provider>

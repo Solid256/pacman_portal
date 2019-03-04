@@ -147,6 +147,8 @@ class Ghost(GameObject):
         self.sprites = sprites
         self.prev_turn_node = None
 
+        self.freeze_position = False
+
         # Set up the random seed.
         random.seed()
 
@@ -317,7 +319,12 @@ class Ghost(GameObject):
                 # If a previous turn node wasn't found, just let the a star algorithm run. Otherwise check for turning
                 # corners.
                 if self.prev_turn_node is None:
-                    self.run_direction = self.a_star()
+                    direction = self.a_star()
+                    if not direction == -1:
+                        self.run_direction = direction
+                        self.freeze_position = False
+                    else:
+                        self.freeze_position = True
                 else:
                     # First check if you actually have to use the a star algorithm. Check for multiple turning paths.
                     if self.run_direction == 0 or self.run_direction == 1:
@@ -415,7 +422,12 @@ class Ghost(GameObject):
                                             self.run_direction = self.portal_entrance_2.direction
 
                             if not self.run_mode == 2:
-                                self.run_direction = self.a_star()
+                                direction = self.a_star()
+                                if not direction == -1:
+                                    self.run_direction = direction
+                                    self.freeze_position = False
+                                else:
+                                    self.freeze_position = True
 
             # Check if changing direction for the portal animations.
             if self.run_mode == 2:
@@ -474,14 +486,15 @@ class Ghost(GameObject):
                             if self.pacman.dots_eaten >= 200:
                                 self.current_speed += 0.1
 
-                if self.run_direction == 0:
-                    self.position_x -= self.current_speed + self.extra_movement
-                elif self.run_direction == 1:
-                    self.position_x += self.current_speed + self.extra_movement
-                elif self.run_direction == 2:
-                    self.position_y -= self.current_speed + self.extra_movement
-                elif self.run_direction == 3:
-                    self.position_y += self.current_speed + self.extra_movement
+                if not self.freeze_position:
+                    if self.run_direction == 0:
+                        self.position_x -= self.current_speed + self.extra_movement
+                    elif self.run_direction == 1:
+                        self.position_x += self.current_speed + self.extra_movement
+                    elif self.run_direction == 2:
+                        self.position_y -= self.current_speed + self.extra_movement
+                    elif self.run_direction == 3:
+                        self.position_y += self.current_speed + self.extra_movement
 
             # Process the ghost animation.
             if self.cur_anim_run >= self.max_anim_run:
@@ -611,7 +624,7 @@ class Ghost(GameObject):
             self.a_star_end_index_x = self.scatter_index_x
             self.a_star_end_index_y = self.scatter_index_y
 
-        elif self.run_mode == 1:
+        elif self.run_mode == 1 and not self.pacman.is_traveling:
             if self.ghost_type == 1:
                 pacman_extended_position_x = int(int(self.pacman.position_x / 16) * 16) + 8
                 pacman_extended_position_y = int(int(self.pacman.position_y / 16) * 16) + 8
@@ -984,7 +997,7 @@ class Ghost(GameObject):
                 return self.run_direction
 
         else:
-            return self.run_direction
+            return -1
 
     def check_child(self, min_node_index_x, min_node_index_y, cur_min_node, child_node):
         # Update the node distances for the child nodes.

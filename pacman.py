@@ -179,6 +179,7 @@ class Player(GameObject):
             # Check if the map was finished.
             if self.finished_map:
                 if self.finished_map_waiting:
+                    self.sound_manager.channel_song.stop()
                     pygame.time.wait(1200)
                     self.game_objs_ghosts.clear()
 
