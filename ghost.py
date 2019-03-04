@@ -578,9 +578,12 @@ class Ghost(GameObject):
                     if not self.started_in_ghost_house:
                         self.run_mode = self.timed_run_mode
                     else:
-                        self.run_mode = 3
-                        self.is_blinking = False
-                        self.is_vulnerable = True
+                        if self.pacman.ate_pellet:
+                            self.run_mode = 3
+                            self.is_blinking = False
+                            self.is_vulnerable = True
+                        else:
+                            self.run_mode = self.timed_run_mode
                         self.started_in_ghost_house = False
 
                     self.position_x = 224

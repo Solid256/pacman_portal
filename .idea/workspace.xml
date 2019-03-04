@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="18240574-6ba4-4913-9afd-603480c8a373" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ghost.py" beforeDir="false" afterPath="$PROJECT_DIR$/ghost.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/high_scores.bin" beforeDir="false" afterPath="$PROJECT_DIR$/high_scores.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman.py" beforeDir="false" afterPath="$PROJECT_DIR$/pacman.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ghost.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="611" column="55" lean-forward="true" selection-start-line="611" selection-start-column="55" selection-end-line="611" selection-end-column="55" />
+            <state relative-caret-position="544">
+              <caret line="585" column="63" selection-start-line="585" selection-start-column="63" selection-end-line="585" selection-end-column="63" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -491,8 +489,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ghost.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="611" column="55" lean-forward="true" selection-start-line="611" selection-start-column="55" selection-end-line="611" selection-end-column="55" />
+        <state relative-caret-position="544">
+          <caret line="585" column="63" selection-start-line="585" selection-start-column="63" selection-end-line="585" selection-end-column="63" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
