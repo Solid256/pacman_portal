@@ -365,15 +365,15 @@ class GameSystem:
                     button_pressed = button.check_was_clicked()
 
                     if button_pressed:
-                        if button.type == 0:
+                        if button.button_type == 0:
                             self.game_mode = 1
                             self.sound_manager.play_sound(self.sound_manager.sound1_pacdot_2, 1, 0)
                             self.setup_game()
-                        elif button.type == 1:
+                        elif button.button_type == 1:
                             self.game_mode = 3
                             self.sound_manager.play_sound(self.sound_manager.sound1_pacdot_2, 1, 0)
                             self.setup_high_score_table()
-                        elif button.type == 2:
+                        elif button.button_type == 2:
                             self.game_mode = 0
                             self.sound_manager.play_sound(self.sound_manager.sound1_pacdot_2, 1, 0)
                             self.setup_menu()
