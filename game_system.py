@@ -1627,18 +1627,20 @@ class GameSystem:
 
                         elif ghost.run_mode == 0 or ghost.run_mode == 1 or (ghost.run_mode == 2 and
                                                                             not ghost.image == ghost.image_eyes_d):
-                            self.game_obj_player.is_dead = True
-                            self.game_obj_player.image = self.game_obj_player.image_runr3
-                            self.game_obj_player.is_running = False
-                            self.game_objs_ghosts.clear()
-                            self.game_obj_fruit = None
-                            self.portal_shot_1 = None
-                            self.portal_shot_2 = None
 
-                            self.sound_manager.channel_song.stop()
-                            pygame.time.wait(1200)
+                            if not ghost.spawn_mode == 2:
+                                self.game_obj_player.is_dead = True
+                                self.game_obj_player.image = self.game_obj_player.image_runr3
+                                self.game_obj_player.is_running = False
+                                self.game_objs_ghosts.clear()
+                                self.game_obj_fruit = None
+                                self.portal_shot_1 = None
+                                self.portal_shot_2 = None
 
-                            self.sound_manager.play_sound(self.sound_manager.song_pacman_die, 0, 0)
+                                self.sound_manager.channel_song.stop()
+                                pygame.time.wait(1200)
+
+                                self.sound_manager.play_sound(self.sound_manager.song_pacman_die, 0, 0)
 
         # Check for collisions between the player and the fruit.
         if self.game_obj_player is not None:
@@ -1664,6 +1666,7 @@ class GameSystem:
                     ghost.run_direction = 3
                     ghost.position_x = 224
                     ghost.spawn_mode = 4
+                    print("collided")
 
         # Check for collisions between the portal shot and the portal entrances.
         if self.portal_entrance_1 is not None:

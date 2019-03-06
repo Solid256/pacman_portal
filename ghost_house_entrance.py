@@ -18,4 +18,4 @@ class GhostHouseEntrance(GameObject):
         self.image_rect = pygame.Rect(x - 8, y - 8, original_rect.width, original_rect.height)
 
         # The collision rect.
-        self.collision_rect = pygame.Rect(x, y - 8, 2, 2)
+        self.collision_rect = pygame.Rect(x, y - 8, 2, 16)
