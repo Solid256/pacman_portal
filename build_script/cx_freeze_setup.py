@@ -7,4 +7,5 @@
 setup(name="Pacman_Portal",
       version="1.0",
       description="Pacman with portals.",
-      executables=[Executable("pacman_portal.py", base = "Win32GUI")])"""
+      executables=[Executable("pacman_portal.py", base = "Win32GUI")])
+"""

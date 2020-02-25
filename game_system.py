@@ -67,7 +67,7 @@ class GameSystem:
         # The ghost current time scatter.
         self.ghost_cur_time_scatter = self.ghost_max_time_scatter
 
-        # The current level that Pac-Man is on.
+        # The current level that pacMan is on.
         self.cur_level = 0
 
         # The number of dots Pacman has eaten.
@@ -127,7 +127,7 @@ class GameSystem:
         # The backbuffer being rendered to.
         self.backbuffer = None
 
-        # The player game object. AKA Pac-Man.
+        # The player game object. AKA pacMan.
         self.game_obj_player = None
 
         # The fruit game object.
@@ -148,7 +148,7 @@ class GameSystem:
         # The portal entrance 2.
         self.portal_entrance_2 = None
 
-        # The Pac-Man title animation.
+        # The pacMan title animation.
         self.pacman_title_animation = None
 
         # The blinky title animation.
@@ -377,11 +377,11 @@ class GameSystem:
         font2 = self.fonts["PressStart2P-medium"]
         font3 = self.fonts["PressStart2P-small"]
 
-        # The text box for the Pac-Man title.
-        text_1 = TextBox(232, 80, False, "PAC-MAN", font1, (255, 255, 150))
+        # The first text box for the Pacman Portal title.
+        text_1 = TextBox(232, 80, False, "PACMAN", font1, (255, 255, 150))
         self.game_objs_text_boxes["title1"] = text_1
 
-        # The text box for the Pac-Man Portal title.
+        # The second text box for the Pacman Portal title.
         text_2 = TextBox(232, 130, False, "PORTAL", font1, (255, 255, 150))
         self.game_objs_text_boxes["title2"] = text_2
 
@@ -483,11 +483,11 @@ class GameSystem:
         self.current_score = 0
         self.got_extra_life = False
 
-        # Create the rect for the Pac-Man life display.
+        # Create the rect for the pacMan life display.
         cur_rect = pygame.Rect(0, 0, 32, 32)
         self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_rect))
 
-        # Create another rect for the Pac-Man life display.
+        # Create another rect for the pacMan life display.
         cur_rect2 = pygame.Rect(0, 0, 32, 32)
         self.lives_display.append((self.sprite_images["pacman_run2.png"], cur_rect2))
 

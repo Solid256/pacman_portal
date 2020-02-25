@@ -373,7 +373,7 @@ class Ghost(GameObject):
 
                             # Check for the existence of a portal. If one exists, go right ahead and decide to either go
                             # through the portal or follow the a star algorithm.
-                            # Check if Pac-Man is entering a portal. If so make the player start traveling.
+                            # Check if pacman is entering a portal. If so make the player start traveling.
                             if self.can_travel_through_portals and \
                                     not self.run_mode == 2 and \
                                     not self.run_mode == 3 and \

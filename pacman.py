@@ -241,13 +241,13 @@ class Player(GameObject):
                     # Checks if the player is able to change direction.
                     is_able_change_direction = True
 
-                    # The position x of Pac-Man aligned with the grid.
+                    # The position x of pacman aligned with the grid.
                     pacman_aligned_position_x = int(int(self.position_x / 16) * 16) + 8
 
-                    # The position y of Pac-Man aligned with the grid.
+                    # The position y of pacman aligned with the grid.
                     pacman_aligned_position_y = int(int(self.position_y / 16) * 16) + 8
 
-                    # Check if Pac-Man is entering a portal. If so make the player start traveling.
+                    # Check if pacman is entering a portal. If so make the player start traveling.
                     if self.portal_entrance_1 is not None and self.portal_entrance_2 is not None and \
                             not self.is_traveling and not self.in_portal and not self.leaving_portal and \
                             not self.portal_entrance_1.in_use and not self.portal_entrance_2.in_use:

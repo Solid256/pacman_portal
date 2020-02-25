@@ -31,7 +31,8 @@ class SoundManager:
 
     def init(self):
         # Initialize the mixer with mono sound and a 4096 size music buffer.
-        pygame.mixer.init(44100, -16, 1, 1024)
+        pygame.mixer.pre_init(44100, -16, 1, 1024)
+        pygame.mixer.init()
 
         self.channel_song = pygame.mixer.Channel(0)
         self.channel_1 = pygame.mixer.Channel(1)
